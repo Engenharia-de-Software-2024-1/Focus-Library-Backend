@@ -18,5 +18,5 @@ public class SessaoId {
     private Long sessaoId;
 
     @Column(name = "usuario_id")
-    private Long usuarioId;
+    private String usuarioId;
 }
