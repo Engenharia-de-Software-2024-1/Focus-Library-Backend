@@ -1,6 +1,6 @@
 package com.focuslibrary.focus_library.service.auth;
 
-import com.focuslibrary.focus_library.dto.AuthDTO;
+import com.focuslibrary.focus_library.dto.AuthRequestDTO;
 import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
 import com.focuslibrary.focus_library.exeptions.FocusLibraryExeption;
 import com.focuslibrary.focus_library.model.Usuario;
@@ -27,7 +27,7 @@ public class AuthServiceImp implements UserDetailsService {
         return usuarioRepository.findByUsername(username);
     }
 
-    public UsuarioResponseDTO registrar(AuthDTO authDTO) {
+    public UsuarioResponseDTO registrar(AuthRequestDTO authDTO) {
         if (usuarioRepository.findByUsername(authDTO.getUsername()) != null) {
             throw new FocusLibraryExeption("");
         }

@@ -1,8 +1,10 @@
 package com.focuslibrary.focus_library.controller;
 
-import com.focuslibrary.focus_library.dto.AuthDTO;
-import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
+import com.focuslibrary.focus_library.dto.AuthRequestDTO;
+import com.focuslibrary.focus_library.dto.AuthResponseDTO;
 import com.focuslibrary.focus_library.exeptions.FocusLibraryExeption;
+import com.focuslibrary.focus_library.model.Usuario;
+import com.focuslibrary.focus_library.config.security.TokenService;
 import com.focuslibrary.focus_library.service.auth.AuthServiceImp;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,23 +24,26 @@ public class AuthController {
     @Autowired
     private AuthServiceImp authImp;
 
+    @Autowired
+    private TokenService tokenService;
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(
-            @RequestBody @Valid AuthDTO authDTO
+            @RequestBody @Valid AuthRequestDTO authDTO
             ) {
-        System.out.println("opa");
         var usernamePassword = new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getSenha());
         var auth = authenticationManager.authenticate(usernamePassword);
 
+        var token = tokenService.generateToken((Usuario) auth.getPrincipal());
 
         return ResponseEntity
-                .status(HttpStatus.OK).build();
+                .status(HttpStatus.OK).body(new AuthResponseDTO(token));
     }
 
     @PostMapping("/registrar")
     public ResponseEntity<?> registrar(
-            @RequestBody @Valid AuthDTO authDTO) {
+            @RequestBody @Valid AuthRequestDTO authDTO) {
         try {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
