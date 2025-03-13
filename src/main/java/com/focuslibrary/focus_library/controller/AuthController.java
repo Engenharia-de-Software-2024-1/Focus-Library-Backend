@@ -38,7 +38,7 @@ public class AuthController {
         var token = tokenService.generateToken((Usuario) auth.getPrincipal());
 
         return ResponseEntity
-                .status(HttpStatus.OK).body(new AuthResponseDTO(token));
+                .status(HttpStatus.OK).body(token);
     }
 
     @PostMapping("/registrar")
@@ -51,5 +51,13 @@ public class AuthController {
         } catch (FocusLibraryExeption e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @GetMapping("/refresh")
+    public ResponseEntity<?> refresh(
+            @RequestParam String refreshToken) {
+        String token = tokenService.getAcessToken(refreshToken);
+        System.out.println(refreshToken);
+        return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
 }

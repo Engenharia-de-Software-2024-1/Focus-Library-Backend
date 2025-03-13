@@ -1,6 +1,7 @@
 package com.focuslibrary.focus_library.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.focuslibrary.focus_library.model.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,4 +25,11 @@ public class UsuarioResponseDTO {
 
     @JsonProperty("dataNascimento")
     private LocalDate dataNascimento;
+
+    public UsuarioResponseDTO(Usuario usuario) {
+        this.userId = usuario.getUserId();
+        this.username = usuario.getUsername();
+        this.email = usuario.getEmail();
+        this.dataNascimento = usuario.getDataNascimento();
+    }
 }
