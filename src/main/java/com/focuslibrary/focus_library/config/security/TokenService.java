@@ -12,6 +12,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.focuslibrary.focus_library.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -43,8 +46,19 @@ public class TokenService {
                     .sign(algorithm);
             return new AuthResponseDTO(acessToken, refreshToken);
         } catch (JWTCreationException exception) {
-            throw  new FocusLibraryExeption("Erro ao gerar token!");
+            throw new FocusLibraryExeption("Erro ao gerar token!");
         }
+    }
+
+    public static String getUsernameUsuarioLogado() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            return ((UserDetails) authentication.getPrincipal()).getUsername();
+        } else if (authentication != null) {
+            return authentication.getPrincipal().toString();
+        }
+        return null;
     }
 
     public String validateToken(String token) {

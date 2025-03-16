@@ -48,6 +48,10 @@ public class Usuario implements UserDetails {
         this.senha = senha;
     }
 
+    public void addSessao(Sessao sessao){
+        if(!sessoes.contains(sessao)){sessoes.add(sessao);}
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();
