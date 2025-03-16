@@ -5,8 +5,8 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.focuslibrary.focus_library.dto.AuthRequestDTO;
 import com.focuslibrary.focus_library.dto.AuthResponseDTO;
-import com.focuslibrary.focus_library.exeptions.FocusLibraryExeption;
-import com.focuslibrary.focus_library.exeptions.InvalidRefreshToken;
+import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
+import com.focuslibrary.focus_library.exceptions.InvalidRefreshToken;
 import com.focuslibrary.focus_library.model.Usuario;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.focuslibrary.focus_library.repository.UsuarioRepository;
@@ -46,7 +46,7 @@ public class TokenService {
                     .sign(algorithm);
             return new AuthResponseDTO(acessToken, refreshToken);
         } catch (JWTCreationException exception) {
-            throw new FocusLibraryExeption("Erro ao gerar token!");
+            throw new FocusLibraryException("Erro ao gerar token!");
         }
     }
 

@@ -2,7 +2,7 @@ package com.focuslibrary.focus_library.controller;
 
 import com.focuslibrary.focus_library.dto.AuthRequestDTO;
 import com.focuslibrary.focus_library.dto.AuthResponseDTO;
-import com.focuslibrary.focus_library.exeptions.FocusLibraryExeption;
+import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
 import com.focuslibrary.focus_library.model.Usuario;
 import com.focuslibrary.focus_library.config.security.TokenService;
 import com.focuslibrary.focus_library.service.auth.AuthServiceImp;
@@ -48,7 +48,7 @@ public class AuthController {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(authImp.registrar(authDTO));
-        } catch (FocusLibraryExeption e) {
+        } catch (FocusLibraryException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }

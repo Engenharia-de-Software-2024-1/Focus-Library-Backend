@@ -41,7 +41,7 @@ public class Usuario implements UserDetails {
     private LocalDate dataNascimento;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Sessao> sessoes = new ArrayList<>();
+    private List<Sessao> sessoes;
 
     public Usuario(String username, String senha){
         this.username = username;

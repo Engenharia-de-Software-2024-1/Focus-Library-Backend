@@ -2,7 +2,7 @@ package com.focuslibrary.focus_library.service.auth;
 
 import com.focuslibrary.focus_library.dto.AuthRequestDTO;
 import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
-import com.focuslibrary.focus_library.exeptions.FocusLibraryExeption;
+import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
 import com.focuslibrary.focus_library.model.Usuario;
 import com.focuslibrary.focus_library.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
@@ -29,7 +29,7 @@ public class AuthServiceImp implements UserDetailsService {
 
     public UsuarioResponseDTO registrar(AuthRequestDTO authDTO) {
         if (usuarioRepository.findByUsername(authDTO.getUsername()) != null) {
-            throw new FocusLibraryExeption("");
+            throw new FocusLibraryException("");
         }
         String criptografado = new BCryptPasswordEncoder().encode(authDTO.getSenha());
         Usuario usuario = new Usuario(authDTO.getUsername(), criptografado);

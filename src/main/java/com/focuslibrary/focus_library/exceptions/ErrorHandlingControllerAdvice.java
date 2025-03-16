@@ -1,4 +1,4 @@
-package com.focuslibrary.focus_library.exeptions;
+package com.focuslibrary.focus_library.exceptions;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -51,10 +51,10 @@ public class ErrorHandlingControllerAdvice {
         return customErrorType;
     }
 
-    @ExceptionHandler(FocusLibraryExeption.class)
+    @ExceptionHandler(FocusLibraryException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public CustomErrorType onCommerceException(FocusLibraryExeption e) {
+    public CustomErrorType onCommerceException(FocusLibraryException e) {
         return defaultCustomErrorTypeConstruct(
                 e.getMessage()
         );

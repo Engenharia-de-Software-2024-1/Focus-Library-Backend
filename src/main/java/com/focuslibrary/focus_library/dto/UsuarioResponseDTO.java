@@ -26,6 +26,9 @@ public class UsuarioResponseDTO {
     @JsonProperty("dataNascimento")
     private LocalDate dataNascimento;
 
+    @JsonProperty("streak")
+    private Long streak;
+
     public UsuarioResponseDTO(Usuario usuario) {
         this.userId = usuario.getUserId();
         this.username = usuario.getUsername();

@@ -3,7 +3,7 @@ package com.focuslibrary.focus_library.service.sessao;
 import com.focuslibrary.focus_library.config.security.TokenService;
 import com.focuslibrary.focus_library.dto.SessaoPostPutRequestDTO;
 import com.focuslibrary.focus_library.dto.SessaoResponseDTO;
-import com.focuslibrary.focus_library.exeptions.FocusLibraryExeption;
+import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
 import com.focuslibrary.focus_library.model.Sessao;
 import com.focuslibrary.focus_library.model.SessaoId;
 import com.focuslibrary.focus_library.model.Usuario;
@@ -29,14 +29,14 @@ public class SessaoServiceImp implements SessaoService {
 
     private Usuario validateToken(){
         String username = TokenService.getUsernameUsuarioLogado();
-        if (username == null) {throw new FocusLibraryExeption("Token invalido");}
+        if (username == null) {throw new FocusLibraryException("Token invalido");}
         return usuarioRepository.findByUsername(username);
     }
 
     private SessaoId validateSessao(Long sessaoDTOId, String userId){
         SessaoId sessaoId = new SessaoId(sessaoDTOId, userId);
         if (sessaoRepository.findById(sessaoId).isPresent())
-            throw new FocusLibraryExeption("Sessao Ja Cadastrada");
+            throw new FocusLibraryException("Sessao Ja Cadastrada");
         return sessaoId;
     }
 

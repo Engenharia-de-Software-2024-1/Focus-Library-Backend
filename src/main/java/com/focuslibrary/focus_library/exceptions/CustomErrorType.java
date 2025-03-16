@@ -1,4 +1,4 @@
-package com.focuslibrary.focus_library.exeptions;
+package com.focuslibrary.focus_library.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class CustomErrorType {
     @JsonProperty("errors")
     private List<String> errors;
 
-    public CustomErrorType(FocusLibraryExeption e) {
+    public CustomErrorType(FocusLibraryException e) {
         this.timestamp = LocalDateTime.now();
         this.message = e.getMessage();
         this.errors = new ArrayList<>();
