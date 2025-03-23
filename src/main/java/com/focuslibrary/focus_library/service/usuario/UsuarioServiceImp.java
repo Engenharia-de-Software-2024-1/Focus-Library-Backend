@@ -121,7 +121,7 @@ public class UsuarioServiceImp implements UsuarioService {
         if (sessoes.isEmpty()) {
             return 0L;
         }
-
+        
         // Sort sessions by date
         sessoes.sort(Comparator.comparing(Sessao::getData));
         
@@ -145,7 +145,7 @@ public class UsuarioServiceImp implements UsuarioService {
             LocalDate date = uniqueDates.get(i);
             LocalDate previousDate = uniqueDates.get(i + 1);
             
-            if (ChronoUnit.DAYS.between(previousDate, date) == 1) {
+            if (ChronoUnit.DAYS.between(date, previousDate) == 1) {
                 streak++;
             } else {
                 break;
