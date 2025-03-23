@@ -1,7 +1,6 @@
 package com.focuslibrary.focus_library.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.*;
@@ -41,7 +40,8 @@ public class Usuario implements UserDetails {
     private LocalDate dataNascimento;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Sessao> sessoes;
+    @Builder.Default
+    private List<Sessao> sessoes = new ArrayList<>();
 
     public Usuario(String username, String senha){
         this.username = username;

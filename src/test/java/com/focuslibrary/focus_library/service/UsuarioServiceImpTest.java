@@ -1,4 +1,4 @@
-package com.focuslibrary.focus_library.service.usuario;
+package com.focuslibrary.focus_library.service;
 
 import com.focuslibrary.focus_library.config.security.TokenService;
 import com.focuslibrary.focus_library.dto.UsuarioPostPutRequestDTO;
@@ -8,6 +8,7 @@ import com.focuslibrary.focus_library.exceptions.UsuarioNaoExisteException;
 import com.focuslibrary.focus_library.model.Usuario;
 import com.focuslibrary.focus_library.model.Sessao;
 import com.focuslibrary.focus_library.repository.UsuarioRepository;
+import com.focuslibrary.focus_library.service.usuario.UsuarioServiceImp;
 import com.focuslibrary.focus_library.repository.SessaoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
