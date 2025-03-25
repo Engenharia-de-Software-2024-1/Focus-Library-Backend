@@ -2,10 +2,12 @@ package com.focuslibrary.focus_library.controller;
 
 import com.focuslibrary.focus_library.dto.AuthRequestDTO;
 import com.focuslibrary.focus_library.dto.AuthResponseDTO;
+import com.focuslibrary.focus_library.dto.GoogleAuthRequestDTO;
 import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
 import com.focuslibrary.focus_library.model.Usuario;
 import com.focuslibrary.focus_library.config.security.TokenService;
 import com.focuslibrary.focus_library.service.auth.AuthServiceImp;
+import com.focuslibrary.focus_library.service.auth.GoogleAuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,9 @@ public class AuthController {
 
     @Autowired
     private TokenService tokenService;
+    
+    @Autowired
+    private GoogleAuthService googleAuthService;
 
 
     @PostMapping("/login")
@@ -50,6 +55,18 @@ public class AuthController {
                     .body(authImp.registrar(authDTO));
         } catch (FocusLibraryException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+    
+    @PostMapping("/google")
+    public ResponseEntity<?> loginWithGoogle(
+            @RequestBody @Valid GoogleAuthRequestDTO googleAuthRequest) {
+        try {
+            AuthResponseDTO response = googleAuthService.authenticateWithGoogle(googleAuthRequest);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Erro na autenticação com Google: " + e.getMessage());
         }
     }
 
