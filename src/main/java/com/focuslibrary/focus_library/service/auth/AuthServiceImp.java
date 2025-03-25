@@ -5,6 +5,7 @@ import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
 import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
 import com.focuslibrary.focus_library.model.Usuario;
 import com.focuslibrary.focus_library.repository.UsuarioRepository;
+import com.focuslibrary.focus_library.dto.AuthRegisterDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,12 +28,12 @@ public class AuthServiceImp implements UserDetailsService {
         return usuarioRepository.findByUsername(username);
     }
 
-    public UsuarioResponseDTO registrar(AuthRequestDTO authDTO) {
+    public UsuarioResponseDTO registrar(AuthRegisterDTO authDTO) {
         if (usuarioRepository.findByUsername(authDTO.getUsername()) != null) {
             throw new FocusLibraryException("");
         }
         String criptografado = new BCryptPasswordEncoder().encode(authDTO.getSenha());
-        Usuario usuario = new Usuario(authDTO.getUsername(), criptografado);
+        Usuario usuario = new Usuario(authDTO.getUsername(), criptografado, authDTO.getEmail());
         usuarioRepository.save(usuario);
         return modelMapper.map(usuario, UsuarioResponseDTO.class);
     }

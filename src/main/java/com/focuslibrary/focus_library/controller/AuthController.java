@@ -2,6 +2,7 @@ package com.focuslibrary.focus_library.controller;
 
 import com.focuslibrary.focus_library.dto.AuthRequestDTO;
 import com.focuslibrary.focus_library.dto.AuthResponseDTO;
+import com.focuslibrary.focus_library.dto.AuthRegisterDTO;
 import com.focuslibrary.focus_library.dto.GoogleAuthRequestDTO;
 import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
 import com.focuslibrary.focus_library.model.Usuario;
@@ -48,7 +49,7 @@ public class AuthController {
 
     @PostMapping("/registrar")
     public ResponseEntity<?> registrar(
-            @RequestBody @Valid AuthRequestDTO authDTO) {
+            @RequestBody @Valid AuthRegisterDTO authDTO) {
         try {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
