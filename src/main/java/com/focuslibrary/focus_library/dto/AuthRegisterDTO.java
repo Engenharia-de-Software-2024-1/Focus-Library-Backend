@@ -1,5 +1,7 @@
 package com.focuslibrary.focus_library.dto;
 
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -14,4 +16,7 @@ public class AuthRegisterDTO {
 
     @NotBlank(message = "Email Invalido")
     private String email;
+
+    @NotBlank(message = "Data de Nascimento Invalida")
+    private LocalDate dataNascimento;
 }

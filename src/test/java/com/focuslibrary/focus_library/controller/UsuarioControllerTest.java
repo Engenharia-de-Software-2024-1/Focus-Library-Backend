@@ -1,8 +1,14 @@
 package com.focuslibrary.focus_library.controller;
 
-import com.focuslibrary.focus_library.dto.UsuarioPostPutRequestDTO;
-import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
-import com.focuslibrary.focus_library.service.usuario.UsuarioService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,12 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import com.focuslibrary.focus_library.dto.UsuarioPostPutRequestDTO;
+import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
+import com.focuslibrary.focus_library.service.usuario.UsuarioService;
 
 @ExtendWith(MockitoExtension.class)
 class UsuarioControllerTest {
@@ -29,7 +32,6 @@ class UsuarioControllerTest {
     private UsuarioController usuarioController;
 
     private UsuarioResponseDTO usuarioResponseDTO;
-    private UsuarioPostPutRequestDTO usuarioRequestDTO;
     private String idUser;
 
     @BeforeEach

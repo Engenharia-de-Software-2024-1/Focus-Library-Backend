@@ -28,12 +28,6 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
-    @PostMapping
-    public ResponseEntity<UsuarioResponseDTO> criarUsuario(@RequestBody UsuarioPostPutRequestDTO usuarioDTO) {
-        UsuarioResponseDTO usuario = usuarioService.addUsuario(usuarioDTO);
-        return ResponseEntity.ok(usuario);
-    }
-
     @PutMapping("/{idUser}")
     public ResponseEntity<UsuarioResponseDTO> atualizarUsuario(
             @PathVariable String idUser,

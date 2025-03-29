@@ -1,12 +1,12 @@
 package com.focuslibrary.focus_library.dto;
 
+import java.time.LocalDate;
+
 import com.focuslibrary.focus_library.model.SessaoId;
-import jakarta.persistence.criteria.CriteriaBuilder;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDate;
 
 @Data
 @Builder

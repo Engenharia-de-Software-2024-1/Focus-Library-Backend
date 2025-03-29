@@ -1,21 +1,28 @@
 package com.focuslibrary.focus_library.controller;
 
-import com.focuslibrary.focus_library.dto.AuthRequestDTO;
-import com.focuslibrary.focus_library.dto.AuthResponseDTO;
-import com.focuslibrary.focus_library.dto.AuthRegisterDTO;
-import com.focuslibrary.focus_library.dto.GoogleAuthRequestDTO;
-import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
-import com.focuslibrary.focus_library.model.Usuario;
-import com.focuslibrary.focus_library.config.security.TokenService;
-import com.focuslibrary.focus_library.service.auth.AuthServiceImp;
-import com.focuslibrary.focus_library.service.auth.GoogleAuthService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.focuslibrary.focus_library.config.security.TokenService;
+import com.focuslibrary.focus_library.dto.AuthRegisterDTO;
+import com.focuslibrary.focus_library.dto.AuthRequestDTO;
+import com.focuslibrary.focus_library.dto.AuthResponseDTO;
+import com.focuslibrary.focus_library.dto.GoogleAuthRequestDTO;
+import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
+import com.focuslibrary.focus_library.model.Usuario;
+import com.focuslibrary.focus_library.service.auth.AuthServiceImp;
+import com.focuslibrary.focus_library.service.auth.GoogleAuthService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("auth")

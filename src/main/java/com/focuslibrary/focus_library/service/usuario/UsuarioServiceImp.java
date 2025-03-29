@@ -55,22 +55,6 @@ public class UsuarioServiceImp implements UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    public UsuarioResponseDTO addUsuario(UsuarioPostPutRequestDTO usuarioDTO) {
-        Usuario usuario = Usuario.builder()
-                .username(usuarioDTO.getUsername())
-                .senha(passwordEncoder.encode(usuarioDTO.getSenha()))
-                .email(usuarioDTO.getEmail())
-                .dataNascimento(usuarioDTO.getDataNascimento())
-                .build();
-        usuario = usuarioRepository.save(usuario);
-        return UsuarioResponseDTO.builder()
-                .userId(usuario.getUserId())
-                .username(usuario.getUsername())
-                .email(usuario.getEmail())
-                .dataNascimento(usuario.getDataNascimento())
-                .build();
-    }
-
     public void deleteUsuario(String idUser) {
         Usuario usuario = validateAuthenticatedUser(idUser);
         usuarioRepository.delete(usuario);

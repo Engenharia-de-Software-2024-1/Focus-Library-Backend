@@ -1,15 +1,9 @@
 package com.focuslibrary.focus_library.config.security;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.focuslibrary.focus_library.dto.AuthRequestDTO;
-import com.focuslibrary.focus_library.dto.AuthResponseDTO;
-import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
-import com.focuslibrary.focus_library.exceptions.InvalidRefreshToken;
-import com.focuslibrary.focus_library.model.Usuario;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.focuslibrary.focus_library.repository.UsuarioRepository;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -17,9 +11,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.focuslibrary.focus_library.dto.AuthResponseDTO;
+import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
+import com.focuslibrary.focus_library.exceptions.InvalidRefreshToken;
+import com.focuslibrary.focus_library.model.Usuario;
+import com.focuslibrary.focus_library.repository.UsuarioRepository;
 
 @Service
 public class TokenService {

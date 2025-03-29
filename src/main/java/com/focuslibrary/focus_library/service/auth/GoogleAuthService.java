@@ -1,28 +1,28 @@
 package com.focuslibrary.focus_library.service.auth;
 
-import com.focuslibrary.focus_library.dto.AuthResponseDTO;
-import com.focuslibrary.focus_library.dto.GoogleAuthRequestDTO;
-import com.focuslibrary.focus_library.dto.GoogleUserDTO;
-import com.focuslibrary.focus_library.model.GoogleAccount;
-import com.focuslibrary.focus_library.model.Usuario;
-import com.focuslibrary.focus_library.repository.GoogleAccountRepository;
-import com.focuslibrary.focus_library.repository.UsuarioRepository;
-import com.focuslibrary.focus_library.config.security.TokenService;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.focuslibrary.focus_library.config.security.TokenService;
+import com.focuslibrary.focus_library.dto.AuthResponseDTO;
+import com.focuslibrary.focus_library.dto.GoogleAuthRequestDTO;
+import com.focuslibrary.focus_library.model.GoogleAccount;
+import com.focuslibrary.focus_library.model.Usuario;
+import com.focuslibrary.focus_library.repository.GoogleAccountRepository;
+import com.focuslibrary.focus_library.repository.UsuarioRepository;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 
 @Service
 public class GoogleAuthService {
@@ -56,7 +56,6 @@ public class GoogleAuthService {
             Payload payload = idToken.getPayload();
             String googleId = payload.getSubject();
             String email = payload.getEmail();
-            String name = (String) payload.get("name");
             
             Optional<GoogleAccount> optionalGoogleAccount = googleAccountRepository.findByGoogleId(googleId);
             

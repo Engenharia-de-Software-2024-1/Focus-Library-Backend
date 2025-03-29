@@ -1,11 +1,5 @@
 package com.focuslibrary.focus_library.service.auth;
 
-import com.focuslibrary.focus_library.dto.AuthRequestDTO;
-import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
-import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
-import com.focuslibrary.focus_library.model.Usuario;
-import com.focuslibrary.focus_library.repository.UsuarioRepository;
-import com.focuslibrary.focus_library.dto.AuthRegisterDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +7,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.focuslibrary.focus_library.dto.AuthRegisterDTO;
+import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
+import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
+import com.focuslibrary.focus_library.model.Usuario;
+import com.focuslibrary.focus_library.repository.UsuarioRepository;
 
 @Service
 public class AuthServiceImp implements UserDetailsService {
@@ -25,7 +25,11 @@ public class AuthServiceImp implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return usuarioRepository.findByUsername(username);
+        Usuario usuario = usuarioRepository.findByUsername(username);
+        if (usuario == null) {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
+        return usuario;
     }
 
     public UsuarioResponseDTO registrar(AuthRegisterDTO authDTO) {
@@ -33,7 +37,7 @@ public class AuthServiceImp implements UserDetailsService {
             throw new FocusLibraryException("");
         }
         String criptografado = new BCryptPasswordEncoder().encode(authDTO.getSenha());
-        Usuario usuario = new Usuario(authDTO.getUsername(), criptografado, authDTO.getEmail());
+        Usuario usuario = new Usuario(authDTO.getUsername(), criptografado, authDTO.getEmail(), authDTO.getDataNascimento());
         usuarioRepository.save(usuario);
         return modelMapper.map(usuario, UsuarioResponseDTO.class);
     }
