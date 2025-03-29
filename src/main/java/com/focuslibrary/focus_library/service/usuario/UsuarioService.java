@@ -1,6 +1,7 @@
 package com.focuslibrary.focus_library.service.usuario;
 import java.util.List;
 
+import com.focuslibrary.focus_library.dto.TrocaDadosUserDTO;
 import com.focuslibrary.focus_library.dto.UsuarioPostPutRequestDTO;
 import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
 
@@ -17,4 +18,6 @@ public interface UsuarioService {
     UsuarioResponseDTO getUsuarioByToken();
 
     List<UsuarioResponseDTO> getRanking();
+
+    UsuarioResponseDTO editarDadosGeraisUsuario(String idUser, TrocaDadosUserDTO userDTO);
 }

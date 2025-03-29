@@ -1,8 +1,10 @@
 package com.focuslibrary.focus_library.controller;
 
+import com.focuslibrary.focus_library.dto.TrocaDadosUserDTO;
 import com.focuslibrary.focus_library.dto.UsuarioPostPutRequestDTO;
 import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
 import com.focuslibrary.focus_library.service.usuario.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +43,14 @@ public class UsuarioController {
             @RequestBody UsuarioPostPutRequestDTO usuarioDTO) {
         UsuarioResponseDTO usuario = usuarioService.editarUsuario(idUser, usuarioDTO);
         return ResponseEntity.ok(usuario);
+    }
+
+    @PutMapping("/dadosgerais/{idUser}")
+    public ResponseEntity<UsuarioResponseDTO> atualizarDadosGerais(
+            @RequestBody @Valid TrocaDadosUserDTO userDTO,
+            @PathVariable String idUser
+            ){
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.editarDadosGeraisUsuario(idUser, userDTO));
     }
 
     @DeleteMapping("/{idUser}")

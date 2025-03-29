@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.focuslibrary.focus_library.dto.TrocaDadosUserDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -72,6 +73,18 @@ public class UsuarioServiceImp implements UsuarioService {
         return modelMapper.map(usuario, UsuarioResponseDTO.class);
     }
 
+    public UsuarioResponseDTO editarDadosGeraisUsuario(String idUser, TrocaDadosUserDTO userDTO){
+        Usuario usuario = validateAuthenticatedUser(idUser);
+
+        usuario.setDataNascimento(userDTO.getDataNascimento());
+        usuario.setEmail(userDTO.getEmail());
+        usuario.setUsername(userDTO.getUsername());
+
+        usuarioRepository.save(usuario);
+
+        return modelMapper.map(usuario, UsuarioResponseDTO.class);
+    }
+
     public UsuarioResponseDTO getUsuario(String idUser) {
         Usuario usuario = validateAuthenticatedUser(idUser);
         UsuarioResponseDTO responseDTO = modelMapper.map(usuario, UsuarioResponseDTO.class);
@@ -98,6 +111,7 @@ public class UsuarioServiceImp implements UsuarioService {
                 .sorted(Comparator.comparing(UsuarioResponseDTO::getStreak).reversed())
                 .collect(Collectors.toList());
     }
+
     private Long getStreak(Usuario usuario) {
         List<Sessao> sessoes = sessaoRepository.findByUsuario(usuario);
         if (sessoes.isEmpty()) {
