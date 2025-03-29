@@ -1,10 +1,9 @@
 package com.focuslibrary.focus_library.service.sessao;
 
+import java.util.List;
+
 import com.focuslibrary.focus_library.dto.SessaoPostPutRequestDTO;
 import com.focuslibrary.focus_library.dto.SessaoResponseDTO;
-
-import java.time.LocalTime;
-import java.util.List;
 
 public interface SessaoService {
 

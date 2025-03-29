@@ -79,6 +79,7 @@ class AuthServiceImpTest {
     void registrar_WhenUsernameDoesNotExist_ShouldRegisterUser() {
         when(usuarioRepository.findByUsername(any())).thenReturn(null);
         when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
+        when(modelMapper.map(any(AuthRegisterDTO.class), eq(Usuario.class))).thenReturn(usuario);
         when(modelMapper.map(any(Usuario.class), eq(UsuarioResponseDTO.class))).thenReturn(usuarioResponseDTO);
 
         UsuarioResponseDTO result = authService.registrar(authRegisterDTO);
@@ -88,6 +89,7 @@ class AuthServiceImpTest {
         assertEquals("test@example.com", result.getEmail());
         verify(usuarioRepository).findByUsername(authRegisterDTO.getUsername());
         verify(usuarioRepository).save(any(Usuario.class));
+        verify(modelMapper).map(any(AuthRegisterDTO.class), eq(Usuario.class));
         verify(modelMapper).map(any(Usuario.class), eq(UsuarioResponseDTO.class));
     }
 
