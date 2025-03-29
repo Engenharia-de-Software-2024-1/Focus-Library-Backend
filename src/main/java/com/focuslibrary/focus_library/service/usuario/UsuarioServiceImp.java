@@ -1,23 +1,25 @@
 package com.focuslibrary.focus_library.service.usuario;
 
-import com.focuslibrary.focus_library.config.security.TokenService;
-import com.focuslibrary.focus_library.dto.UsuarioPostPutRequestDTO;
-import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
-import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
-import com.focuslibrary.focus_library.exceptions.UsuarioNaoExisteException;
-import com.focuslibrary.focus_library.model.Usuario;
-import com.focuslibrary.focus_library.model.Sessao;
-import com.focuslibrary.focus_library.repository.UsuarioRepository;
-import com.focuslibrary.focus_library.repository.SessaoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.focuslibrary.focus_library.config.security.TokenService;
+import com.focuslibrary.focus_library.dto.UsuarioPostPutRequestDTO;
+import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
+import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
+import com.focuslibrary.focus_library.exceptions.UsuarioNaoExisteException;
+import com.focuslibrary.focus_library.model.Sessao;
+import com.focuslibrary.focus_library.model.Usuario;
+import com.focuslibrary.focus_library.repository.SessaoRepository;
+import com.focuslibrary.focus_library.repository.UsuarioRepository;
 
 @Service
 public class UsuarioServiceImp implements UsuarioService {
@@ -30,6 +32,9 @@ public class UsuarioServiceImp implements UsuarioService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     private Usuario validateAuthenticatedUser(String idUser) {
         String username = TokenService.getUsernameUsuarioLogado();
@@ -46,12 +51,7 @@ public class UsuarioServiceImp implements UsuarioService {
 
     public List<UsuarioResponseDTO> listarUsers() {
         return usuarioRepository.findAll().stream()
-                .map(usuario -> UsuarioResponseDTO.builder()
-                        .userId(usuario.getUserId())
-                        .username(usuario.getUsername())
-                        .email(usuario.getEmail())
-                        .dataNascimento(usuario.getDataNascimento())
-                        .build())
+                .map(usuario -> modelMapper.map(usuario, UsuarioResponseDTO.class))
                 .collect(Collectors.toList());
     }
 
@@ -63,40 +63,29 @@ public class UsuarioServiceImp implements UsuarioService {
     public UsuarioResponseDTO editarUsuario(String idUser, UsuarioPostPutRequestDTO usuarioDTO) {
         Usuario usuario = validateAuthenticatedUser(idUser);
         
-        usuario.setDataNascimento(usuarioDTO.getDataNascimento());
-        usuario.setEmail(usuarioDTO.getEmail());
-        usuario.setUsername(usuarioDTO.getUsername());
+        modelMapper.map(usuarioDTO, usuario);
         if (usuarioDTO.getSenha() != null) {
             usuario.setSenha(passwordEncoder.encode(usuarioDTO.getSenha()));
         }
         usuario = usuarioRepository.save(usuario);
         
-        return UsuarioResponseDTO.builder()
-                .userId(usuario.getUserId())
-                .username(usuario.getUsername())
-                .email(usuario.getEmail())
-                .dataNascimento(usuario.getDataNascimento())
-                .build();
+        return modelMapper.map(usuario, UsuarioResponseDTO.class);
     }
 
     public UsuarioResponseDTO getUsuario(String idUser) {
         Usuario usuario = validateAuthenticatedUser(idUser);
-        return UsuarioResponseDTO.builder()
-                .userId(usuario.getUserId())
-                .username(usuario.getUsername())
-                .email(usuario.getEmail())
-                .dataNascimento(usuario.getDataNascimento())
-                .streak(getStreak(usuario))
-                .build();
+        UsuarioResponseDTO responseDTO = modelMapper.map(usuario, UsuarioResponseDTO.class);
+        responseDTO.setStreak(getStreak(usuario));
+        return responseDTO;
     }
 
     public List<UsuarioResponseDTO> getRanking() {
         return usuarioRepository.findAll().stream()
-                .map(usuario -> UsuarioResponseDTO.builder()
-                        .userId(usuario.getUserId())
-                        .username(usuario.getUsername())
-                        .streak(getStreak(usuario))
-                        .build())
+                .map(usuario -> {
+                    UsuarioResponseDTO responseDTO = modelMapper.map(usuario, UsuarioResponseDTO.class);
+                    responseDTO.setStreak(getStreak(usuario));
+                    return responseDTO;
+                })
                 .sorted(Comparator.comparing(UsuarioResponseDTO::getStreak).reversed())
                 .collect(Collectors.toList());
     }

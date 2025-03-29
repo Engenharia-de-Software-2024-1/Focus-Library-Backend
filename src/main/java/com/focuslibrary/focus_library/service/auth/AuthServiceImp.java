@@ -37,7 +37,8 @@ public class AuthServiceImp implements UserDetailsService {
             throw new FocusLibraryException("");
         }
         String criptografado = new BCryptPasswordEncoder().encode(authDTO.getSenha());
-        Usuario usuario = new Usuario(authDTO.getUsername(), criptografado, authDTO.getEmail(), authDTO.getDataNascimento());
+        Usuario usuario = modelMapper.map(authDTO, Usuario.class);
+        usuario.setSenha(criptografado);
         usuarioRepository.save(usuario);
         return modelMapper.map(usuario, UsuarioResponseDTO.class);
     }

@@ -43,13 +43,6 @@ public class Usuario implements UserDetails {
     @Builder.Default
     private List<Sessao> sessoes = new ArrayList<>();
 
-    public Usuario(String username, String senha, String email, LocalDate dataNascimento){
-        this.username = username;
-        this.senha = senha;
-        this.email = email;
-        this.dataNascimento = dataNascimento;
-    }
-
     public void addSessao(Sessao sessao){
         if(!sessoes.contains(sessao)){sessoes.add(sessao);}
     }

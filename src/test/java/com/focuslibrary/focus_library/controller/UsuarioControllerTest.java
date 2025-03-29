@@ -32,6 +32,7 @@ class UsuarioControllerTest {
     private UsuarioController usuarioController;
 
     private UsuarioResponseDTO usuarioResponseDTO;
+    private UsuarioPostPutRequestDTO usuarioRequestDTO;
     private String idUser;
 
     @BeforeEach
@@ -44,7 +45,6 @@ class UsuarioControllerTest {
                 .dataNascimento(LocalDate.of(1990, 1, 1))
                 .streak(0L)
                 .build();
-
         usuarioRequestDTO = UsuarioPostPutRequestDTO.builder()
                 .username("Test User")
                 .email("test@example.com")
@@ -82,21 +82,6 @@ class UsuarioControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(usuarioResponseDTO, response.getBody());
         verify(usuarioService).getUsuario(idUser);
-    }
-
-    @Test
-    void criarUsuario_ShouldCreateAndReturnUser() {
-        // Arrange
-        when(usuarioService.addUsuario(usuarioRequestDTO)).thenReturn(usuarioResponseDTO);
-
-        // Act
-        ResponseEntity<UsuarioResponseDTO> response = usuarioController.criarUsuario(usuarioRequestDTO);
-
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(usuarioResponseDTO, response.getBody());
-        verify(usuarioService).addUsuario(usuarioRequestDTO);
     }
 
     @Test
