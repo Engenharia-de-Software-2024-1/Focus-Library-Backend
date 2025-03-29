@@ -4,6 +4,7 @@ import com.focuslibrary.focus_library.dto.UsuarioPostPutRequestDTO;
 import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
 import com.focuslibrary.focus_library.service.usuario.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,12 @@ public class UsuarioController {
     public ResponseEntity<UsuarioResponseDTO> buscarUsuario(@PathVariable String idUser) {
         UsuarioResponseDTO usuario = usuarioService.getUsuario(idUser);
         return ResponseEntity.ok(usuario);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<UsuarioResponseDTO> getUsuarioToken(){
+        UsuarioResponseDTO usuarioDTO = usuarioService.getUsuarioByToken();
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioDTO);
     }
 
     @PutMapping("/{idUser}")

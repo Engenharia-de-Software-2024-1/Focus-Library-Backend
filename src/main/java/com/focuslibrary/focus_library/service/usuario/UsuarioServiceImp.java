@@ -79,6 +79,15 @@ public class UsuarioServiceImp implements UsuarioService {
         return responseDTO;
     }
 
+    public UsuarioResponseDTO getUsuarioByToken(){
+        String username = TokenService.getUsernameUsuarioLogado();
+        if (username == null) {
+            throw new FocusLibraryException("Token inválido");
+        }
+        Usuario usuario = usuarioRepository.findByUsername(username);
+        return modelMapper.map(usuario, UsuarioResponseDTO.class);
+    }
+
     public List<UsuarioResponseDTO> getRanking() {
         return usuarioRepository.findAll().stream()
                 .map(usuario -> {

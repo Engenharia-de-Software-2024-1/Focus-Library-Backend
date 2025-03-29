@@ -17,6 +17,7 @@ public class AuthRegisterDTO {
     @NotBlank(message = "Email Invalido")
     private String email;
 
-    @NotBlank(message = "Data de Nascimento Invalida")
-    private LocalDate dataNascimento;
+    //UI no front end nao envia dataNascimento e NotBlanck Usado apenas com string
+    //@NotBlank(message = "Data de Nascimento Invalida")
+    //private LocalDate dataNascimento;
 }

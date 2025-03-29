@@ -14,5 +14,7 @@ public interface UsuarioService {
 
     UsuarioResponseDTO getUsuario(String idUser);
 
+    UsuarioResponseDTO getUsuarioByToken();
+
     List<UsuarioResponseDTO> getRanking();
 }
