@@ -91,7 +91,7 @@ public class TokenService {
         }
     }
 
-    private Instant getRefreshExpirationData(){
+    private Instant getRefreshExpirationData() {
         return LocalDateTime.now().plusDays(7).toInstant(ZoneOffset.of("-03:00"));
     }
 

@@ -30,22 +30,23 @@ public class AtividadeServiceImp implements AtividadeService {
     @Autowired
     private AtividadeRepository atividadeRepository;
 
-    private Usuario validateToken(){
+    private Usuario validateToken() {
         String username = TokenService.getUsernameUsuarioLogado();
         return usuarioRepository.findByUsername(username);
     }
 
     @Transactional
     @Override
-    public AtividadeDTO addAtividade(AtividadeDTO atividadeDTO) {
+    public AtividadeDTO addAtividade(final AtividadeDTO atividadeDTO) {
         Usuario usuario = validateToken();
 
         AtividadeId atividadeId = new AtividadeId();
         atividadeId.setAtividadeId(atividadeDTO.getAtividadeId());
         atividadeId.setUsuarioId(usuario.getUserId());
 
-        if (atividadeRepository.existsById(atividadeId))
-            throw new FocusLibraryException("Id Atividade Incvalido");
+        if (atividadeRepository.existsById(atividadeId)) {
+            throw new FocusLibraryException("Id Atividade Invalido");
+        }
 
         Atividade atividade = new Atividade();
         atividade.setUsuario(usuario);
@@ -56,7 +57,9 @@ public class AtividadeServiceImp implements AtividadeService {
             List<Sessao> sessoes = atividadeDTO.getSessoes().stream()
                     .map(sessaoDTO -> {
                         Sessao sessao = new Sessao();
-                        sessao.setSegundosDescanso(sessaoDTO.getSegundosDescanso());
+                        sessao.setSegundosDescanso(
+                            sessaoDTO.getSegundosDescanso()
+                        );
                         sessao.setSegundosFoco(sessaoDTO.getSegundosFoco());
                         sessao.setAtividade(atividade);
                         return sessao;
@@ -75,9 +78,12 @@ public class AtividadeServiceImp implements AtividadeService {
         Usuario usuario = validateToken();
         List<Atividade> atividades = usuario.getAtividades();
         List<AtividadeDTO> response = new ArrayList<>();
-        for (Atividade atividade: atividades){
+        for (Atividade atividade: atividades) {
             List<SessaoDTO> sessoesDTO = atividade.getSessoes().stream()
-                    .map(sessao -> new SessaoDTO(sessao.getSegundosDescanso(), sessao.getSegundosFoco()))
+                    .map(sessao -> new SessaoDTO(
+                        sessao.getSegundosDescanso(),
+                        sessao.getSegundosFoco()
+                    ))
                     .collect(Collectors.toList());
 
             AtividadeDTO atividadeDTO = AtividadeDTO.builder()

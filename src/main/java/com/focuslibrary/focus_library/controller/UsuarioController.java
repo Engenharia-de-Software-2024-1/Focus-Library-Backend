@@ -40,7 +40,7 @@ public class UsuarioController {
     }
 
     @GetMapping("")
-    public ResponseEntity<UsuarioResponseDTO> getUsuarioToken(){
+    public ResponseEntity<UsuarioResponseDTO> getUsuarioToken() {
         UsuarioResponseDTO usuarioDTO = usuarioService.getUsuarioByToken();
         return ResponseEntity.status(HttpStatus.OK).body(usuarioDTO);
     }

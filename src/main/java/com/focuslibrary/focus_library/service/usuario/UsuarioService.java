@@ -11,7 +11,10 @@ public interface UsuarioService {
 
     void deleteUsuario(String idUser);
 
-    UsuarioResponseDTO editarUsuario(String idUser, UsuarioPostPutRequestDTO usuarioDTO);
+    UsuarioResponseDTO editarUsuario(
+        String idUser,
+        UsuarioPostPutRequestDTO usuarioDTO
+    );
 
     UsuarioResponseDTO getUsuario(String idUser);
 
@@ -19,5 +22,8 @@ public interface UsuarioService {
 
     List<UsuarioResponseDTO> getRanking();
 
-    UsuarioResponseDTO editarDadosGeraisUsuario(String idUser, TrocaDadosUserDTO userDTO);
+    UsuarioResponseDTO editarDadosGeraisUsuario(
+        String idUser,
+        TrocaDadosUserDTO userDTO
+    );
 }

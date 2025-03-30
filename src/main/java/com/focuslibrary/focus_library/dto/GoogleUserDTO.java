@@ -16,4 +16,4 @@ public class GoogleUserDTO {
     private String picture;
     private String locale;
     private boolean verifiedEmail;
-} 
+}

@@ -87,12 +87,15 @@ public class UsuarioServiceImp implements UsuarioService {
 
     public UsuarioResponseDTO getUsuario(String idUser) {
         Usuario usuario = validateAuthenticatedUser(idUser);
-        UsuarioResponseDTO responseDTO = modelMapper.map(usuario, UsuarioResponseDTO.class);
+        UsuarioResponseDTO responseDTO = modelMapper.map(
+            usuario,
+            UsuarioResponseDTO.class
+        );
         responseDTO.setStreak(getStreak(usuario));
         return responseDTO;
     }
 
-    public UsuarioResponseDTO getUsuarioByToken(){
+    public UsuarioResponseDTO getUsuarioByToken() {
         String username = TokenService.getUsernameUsuarioLogado();
         if (username == null) {
             throw new FocusLibraryException("Token inválido");
@@ -104,15 +107,20 @@ public class UsuarioServiceImp implements UsuarioService {
     public List<UsuarioResponseDTO> getRanking() {
         return usuarioRepository.findAll().stream()
                 .map(usuario -> {
-                    UsuarioResponseDTO responseDTO = modelMapper.map(usuario, UsuarioResponseDTO.class);
+                    UsuarioResponseDTO responseDTO = modelMapper.map(
+                        usuario,
+                        UsuarioResponseDTO.class
+                    );
                     responseDTO.setStreak(getStreak(usuario));
                     return responseDTO;
                 })
-                .sorted(Comparator.comparing(UsuarioResponseDTO::getStreak).reversed())
+                .sorted(Comparator.comparing(
+                    UsuarioResponseDTO::getStreak).reversed()
+                )
                 .collect(Collectors.toList());
     }
 
-    private Long getStreak(Usuario usuario) {
+    private Long getStreak(final Usuario usuario) {
         List<Atividade> atividades = atividadeRepository.findByUsuario(usuario);
         if (atividades.isEmpty()) {
             return 0L;
