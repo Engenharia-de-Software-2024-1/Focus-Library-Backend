@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import com.focuslibrary.focus_library.model.Atividade;
+import com.focuslibrary.focus_library.repository.AtividadeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +46,7 @@ class UsuarioServiceImpTest {
     private UsuarioRepository usuarioRepository;
 
     @Mock
-    private SessaoRepository sessaoRepository;
+    private AtividadeRepository atividadeRepository;
 
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
@@ -208,7 +210,7 @@ class UsuarioServiceImpTest {
         try (MockedStatic<TokenService> tokenServiceMock = mockStatic(TokenService.class)) {
             tokenServiceMock.when(TokenService::getUsernameUsuarioLogado).thenReturn(USERNAME);
             when(usuarioRepository.findById(USER_ID)).thenReturn(Optional.of(usuario));
-            when(sessaoRepository.findByUsuario(any())).thenReturn(Arrays.asList());
+            when(atividadeRepository.findByUsuario(any())).thenReturn(Arrays.asList());
             when(modelMapper.map(any(Usuario.class), eq(UsuarioResponseDTO.class))).thenReturn(usuarioResponseDTO);
 
             UsuarioResponseDTO result = usuarioService.getUsuario(USER_ID);
@@ -255,12 +257,12 @@ class UsuarioServiceImpTest {
                 .build();
 
         when(usuarioRepository.findAll()).thenReturn(Arrays.asList(usuario, usuario2));
-        when(sessaoRepository.findByUsuario(usuario)).thenReturn(Arrays.asList(
-                Sessao.builder().data(LocalDate.now()).build(),
-                Sessao.builder().data(LocalDate.now().minusDays(1)).build()
+        when(atividadeRepository.findByUsuario(usuario)).thenReturn(Arrays.asList(
+                Atividade.builder().data(LocalDate.now()).build(),
+                Atividade.builder().data(LocalDate.now().minusDays(1)).build()
         ));
-        when(sessaoRepository.findByUsuario(usuario2)).thenReturn(Arrays.asList(
-                Sessao.builder().data(LocalDate.now()).build()
+        when(atividadeRepository.findByUsuario(usuario2)).thenReturn(Arrays.asList(
+                Atividade.builder().data(LocalDate.now()).build()
         ));
         when(modelMapper.map(usuario, UsuarioResponseDTO.class)).thenReturn(usuarioResponseDTO);
         when(modelMapper.map(usuario2, UsuarioResponseDTO.class)).thenReturn(usuarioResponseDTO2);

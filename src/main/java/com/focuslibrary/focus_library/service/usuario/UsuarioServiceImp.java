@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.focuslibrary.focus_library.dto.TrocaDadosUserDTO;
+import com.focuslibrary.focus_library.model.Atividade;
+import com.focuslibrary.focus_library.repository.AtividadeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,7 +31,7 @@ public class UsuarioServiceImp implements UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private SessaoRepository sessaoRepository;
+    private AtividadeRepository atividadeRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -113,42 +115,41 @@ public class UsuarioServiceImp implements UsuarioService {
     }
 
     private Long getStreak(Usuario usuario) {
-        return 0L;
-//        List<Sessao> sessoes = sessaoRepository.findByUsuario(usuario);
-//        if (sessoes.isEmpty()) {
-//            return 0L;
-//        }
-//
-//        // Sort sessions by date
-//        sessoes.sort(Comparator.comparing(Sessao::getData));
-//
-//        List<LocalDate> uniqueDates = sessoes.stream()
-//                .map(Sessao::getData)
-//                .distinct()
-//                .sorted()
-//                .collect(Collectors.toList());
-//
-//        LocalDate dataAtual = LocalDate.now();
-//        LocalDate dataUltimaSessao = uniqueDates.get(uniqueDates.size() - 1);
-//
-//        // Check if streak is broken (more than 1 day since last session)
-//        if (ChronoUnit.DAYS.between(dataUltimaSessao, dataAtual) > 1) {
-//            return 0L;
-//        }
-//
-//        // Count consecutive days backwards from the last session
-//        long streak = 1;
-//        for (int i = uniqueDates.size() - 2; i >= 0; i--) {
-//            LocalDate date = uniqueDates.get(i);
-//            LocalDate previousDate = uniqueDates.get(i + 1);
-//
-//            if (ChronoUnit.DAYS.between(date, previousDate) == 1) {
-//                streak++;
-//            } else {
-//                break;
-//            }
-//        }
-//
-//        return streak;
+        List<Atividade> atividades = atividadeRepository.findByUsuario(usuario);
+        if (atividades.isEmpty()) {
+            return 0L;
+        }
+
+        // Sort sessions by date
+        atividades.sort(Comparator.comparing(Atividade::getData));
+
+        List<LocalDate> uniqueDates = atividades.stream()
+                .map(Atividade::getData)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        LocalDate dataAtual = LocalDate.now();
+        LocalDate dataUltimaSessao = uniqueDates.get(uniqueDates.size() - 1);
+
+        // Check if streak is broken (more than 1 day since last session)
+        if (ChronoUnit.DAYS.between(dataUltimaSessao, dataAtual) > 1) {
+            return 0L;
+        }
+
+        // Count consecutive days backwards from the last session
+        long streak = 1;
+        for (int i = uniqueDates.size() - 2; i >= 0; i--) {
+            LocalDate date = uniqueDates.get(i);
+            LocalDate previousDate = uniqueDates.get(i + 1);
+
+            if (ChronoUnit.DAYS.between(date, previousDate) == 1) {
+                streak++;
+            } else {
+                break;
+            }
+        }
+
+        return streak;
     }
 }

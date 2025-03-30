@@ -1,7 +1,9 @@
 package com.focuslibrary.focus_library.controller;
 
+import com.focuslibrary.focus_library.dto.AtividadeDTO;
 import com.focuslibrary.focus_library.dto.SessaoDTO;
 import com.focuslibrary.focus_library.service.sessao.SessaoService;
+import com.focuslibrary.focus_library.service.sessao.SessaoServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,10 +23,10 @@ import static org.mockito.Mockito.*;
 class SessaoControllerTest {
 
     @Mock
-    private SessaoService sessaoService;
+    private SessaoServiceImp atividadeService;
 
     @InjectMocks
-    private SessaoController sessaoController;
+    private SessaoController atividadeController;
 
     @BeforeEach
     void setUp() {
@@ -32,98 +34,57 @@ class SessaoControllerTest {
     }
 
     @Test
-    void addSessao_ShouldReturnCreatedStatusAndResponseDTO() {
+    void addAtividade_ShouldReturnCreatedStatusAndResponseDTO() {
         // Arrange
-        SessaoPostPutRequestDTO requestDTO = new SessaoPostPutRequestDTO();
-        requestDTO.setMinutos(60);
-        requestDTO.setData("2024-03-16");
-        requestDTO.setIdSessao(1L);
+        AtividadeDTO requestDTO = new AtividadeDTO();
+        requestDTO.setAtividadeId("1");
+        requestDTO.setData(LocalDate.parse("2024-03-16"));
+        requestDTO.setSessoes(List.of(new SessaoDTO(30, 60)));
 
-        SessaoDTO expectedResponse = SessaoDTO.builder()
-                .sessaoId(new SessaoId())
+        AtividadeDTO expectedResponse = AtividadeDTO.builder()
+                .atividadeId("1")
                 .data(LocalDate.parse("2024-03-16"))
-                .minutos(60)
+                .sessoes(List.of(new SessaoDTO(30, 60)))
                 .build();
 
-        when(sessaoService.addSessao(any(SessaoPostPutRequestDTO.class))).thenReturn(expectedResponse);
+        when(atividadeService.addAtividade(any(AtividadeDTO.class))).thenReturn(expectedResponse);
 
         // Act
-        ResponseEntity<?> response = sessaoController.addSessao(requestDTO);
+        ResponseEntity<AtividadeDTO> response = atividadeController.addSessao(requestDTO);
 
         // Assert
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(expectedResponse, response.getBody());
-        verify(sessaoService, times(1)).addSessao(any(SessaoPostPutRequestDTO.class));
+        verify(atividadeService, times(1)).addAtividade(any(AtividadeDTO.class));
     }
 
     @Test
-    void addSessaoList_ShouldReturnCreatedStatusAndListOfResponseDTO() {
+    void getAllAtividades_ShouldReturnOkStatusAndListOfResponseDTO() {
         // Arrange
-        SessaoPostPutRequestDTO requestDTO1 = new SessaoPostPutRequestDTO();
-        requestDTO1.setMinutos(60);
-        requestDTO1.setData("2024-03-16");
-        requestDTO1.setIdSessao(1L);
-
-        SessaoPostPutRequestDTO requestDTO2 = new SessaoPostPutRequestDTO();
-        requestDTO2.setMinutos(30);
-        requestDTO2.setData("2024-03-17");
-        requestDTO2.setIdSessao(2L);
-
-        List<SessaoPostPutRequestDTO> requestDTOs = Arrays.asList(requestDTO1, requestDTO2);
-
-        SessaoDTO responseDTO1 = SessaoDTO.builder()
-                .sessaoId(new SessaoId())
+        AtividadeDTO responseDTO1 = AtividadeDTO.builder()
+                .atividadeId("1")
                 .data(LocalDate.parse("2024-03-16"))
-                .minutos(60)
+                .sessoes(List.of(new SessaoDTO(30, 60)))
                 .build();
 
-        SessaoDTO responseDTO2 = SessaoDTO.builder()
-                .sessaoId(new SessaoId())
+        AtividadeDTO responseDTO2 = AtividadeDTO.builder()
+                .atividadeId("2")
                 .data(LocalDate.parse("2024-03-17"))
-                .minutos(30)
+                .sessoes(List.of(new SessaoDTO(45, 15)))
                 .build();
 
-        List<SessaoDTO> expectedResponses = Arrays.asList(responseDTO1, responseDTO2);
+        List<AtividadeDTO> expectedResponses = Arrays.asList(responseDTO1, responseDTO2);
 
-        when(sessaoService.addSessao(anyList())).thenReturn(expectedResponses);
+        when(atividadeService.getUserAtividades()).thenReturn(expectedResponses);
 
         // Act
-        ResponseEntity<?> response = sessaoController.addSessaoList(requestDTOs);
-
-        // Assert
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(expectedResponses, response.getBody());
-        verify(sessaoService, times(1)).addSessao(anyList());
-    }
-
-    @Test
-    void getAllSessao_ShouldReturnOkStatusAndListOfResponseDTO() {
-        // Arrange
-        SessaoDTO responseDTO1 = SessaoDTO.builder()
-                .sessaoId(new SessaoId())
-                .data(LocalDate.parse("2024-03-16"))
-                .minutos(60)
-                .build();
-
-        SessaoDTO responseDTO2 = SessaoDTO.builder()
-                .sessaoId(new SessaoId())
-                .data(LocalDate.parse("2024-03-17"))
-                .minutos(30)
-                .build();
-
-        List<SessaoDTO> expectedResponses = Arrays.asList(responseDTO1, responseDTO2);
-
-        when(sessaoService.getUserSessao()).thenReturn(expectedResponses);
-
-        // Act
-        ResponseEntity<?> response = sessaoController.getAllSessao();
+        ResponseEntity<List<AtividadeDTO>> response = atividadeController.getAllSessao();
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(expectedResponses, response.getBody());
-        verify(sessaoService, times(1)).getUserSessao();
+        assertEquals(2, response.getBody().size());
+        verify(atividadeService, times(1)).getUserAtividades();
     }
-} 
+}
