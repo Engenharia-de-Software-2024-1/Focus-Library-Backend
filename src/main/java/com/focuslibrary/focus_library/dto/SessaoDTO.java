@@ -13,9 +13,9 @@ public class SessaoDTO {
 
     @NotNull(message = "tempo de descanso invalido")
     @Min(value = 0, message = "tempo de descanso invalido")
-    private Integer segundos_descanso;
+    private Integer segundosDescanso;
 
     @NotNull(message = "tempo de foco invalido")
     @Min(value = 0, message = "tempo de foco invalido")
-    private Integer segundos_foco;
+    private Integer segundosFoco;
 }

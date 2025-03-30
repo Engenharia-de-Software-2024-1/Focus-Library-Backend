@@ -1,11 +1,13 @@
 package com.focuslibrary.focus_library.service;
 
-import com.focuslibrary.focus_library.dto.AuthRegisterDTO;
-import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
-import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
-import com.focuslibrary.focus_library.model.Usuario;
-import com.focuslibrary.focus_library.repository.UsuarioRepository;
-import com.focuslibrary.focus_library.service.auth.AuthServiceImp;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,9 +19,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import com.focuslibrary.focus_library.dto.AuthRegisterDTO;
+import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
+import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
+import com.focuslibrary.focus_library.model.Usuario;
+import com.focuslibrary.focus_library.repository.UsuarioRepository;
+import com.focuslibrary.focus_library.service.auth.AuthServiceImp;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceImpTest {

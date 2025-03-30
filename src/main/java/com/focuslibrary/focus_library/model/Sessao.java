@@ -1,6 +1,13 @@
 package com.focuslibrary.focus_library.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,10 +28,10 @@ public class Sessao {
     private Long idSessao;
 
     @Column(nullable = false)
-    private Integer segundos_descanso;
+    private Integer segundosDescanso;
 
     @Column(nullable = false)
-    private Integer segundos_foco;
+    private Integer segundosFoco;
 
     @ManyToOne
     @JoinColumns({

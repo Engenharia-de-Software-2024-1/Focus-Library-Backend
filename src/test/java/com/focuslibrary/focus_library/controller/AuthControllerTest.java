@@ -1,14 +1,15 @@
 package com.focuslibrary.focus_library.controller;
 
-import com.focuslibrary.focus_library.dto.AuthRequestDTO;
-import com.focuslibrary.focus_library.dto.AuthResponseDTO;
-import com.focuslibrary.focus_library.dto.AuthRegisterDTO;
-import com.focuslibrary.focus_library.dto.GoogleAuthRequestDTO;
-import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
-import com.focuslibrary.focus_library.model.Usuario;
-import com.focuslibrary.focus_library.config.security.TokenService;
-import com.focuslibrary.focus_library.service.auth.AuthServiceImp;
-import com.focuslibrary.focus_library.service.auth.GoogleAuthService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,11 +21,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
-import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import com.focuslibrary.focus_library.config.security.TokenService;
+import com.focuslibrary.focus_library.dto.AuthRegisterDTO;
+import com.focuslibrary.focus_library.dto.AuthRequestDTO;
+import com.focuslibrary.focus_library.dto.AuthResponseDTO;
+import com.focuslibrary.focus_library.dto.GoogleAuthRequestDTO;
+import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
+import com.focuslibrary.focus_library.model.Usuario;
+import com.focuslibrary.focus_library.service.auth.AuthServiceImp;
+import com.focuslibrary.focus_library.service.auth.GoogleAuthService;
 
 class AuthControllerTest {
 

@@ -64,9 +64,9 @@ class SessaoServiceImpTest {
                 .build();
 
         SessaoDTO sessao1 = new SessaoDTO(30, 30);
-        Sessao s1 = Sessao.builder().idSessao(1L).segundos_foco(30).segundos_descanso(30).build();
+        Sessao s1 = Sessao.builder().idSessao(1L).segundosFoco(30).segundosDescanso(30).build();
         SessaoDTO sessao2 = new SessaoDTO(60, 40);
-        Sessao s2 = Sessao.builder().idSessao(2L).segundos_foco(40).segundos_descanso(60).build();
+        Sessao s2 = Sessao.builder().idSessao(2L).segundosFoco(40).segundosDescanso(60).build();
         sessoes = new ArrayList<>();
         sessoes.add(s1);
         sessoes.add(s2);

@@ -52,12 +52,12 @@ public class AtividadeServiceImp implements AtividadeService {
         atividade.setData(atividadeDTO.getData());
         atividade.setAtividadeId(atividadeId);
 
-        if(atividadeDTO.getSessoes() != null) {
+        if (atividadeDTO.getSessoes() != null) {
             List<Sessao> sessoes = atividadeDTO.getSessoes().stream()
                     .map(sessaoDTO -> {
                         Sessao sessao = new Sessao();
-                        sessao.setSegundos_descanso(sessaoDTO.getSegundos_descanso());
-                        sessao.setSegundos_foco(sessaoDTO.getSegundos_foco());
+                        sessao.setSegundosDescanso(sessaoDTO.getSegundosDescanso());
+                        sessao.setSegundosFoco(sessaoDTO.getSegundosFoco());
                         sessao.setAtividade(atividade);
                         return sessao;
                     })
@@ -77,7 +77,7 @@ public class AtividadeServiceImp implements AtividadeService {
         List<AtividadeDTO> response = new ArrayList<>();
         for (Atividade atividade: atividades){
             List<SessaoDTO> sessoesDTO = atividade.getSessoes().stream()
-                    .map(sessao -> new SessaoDTO(sessao.getSegundos_descanso(), sessao.getSegundos_foco()))
+                    .map(sessao -> new SessaoDTO(sessao.getSegundosDescanso(), sessao.getSegundosFoco()))
                     .collect(Collectors.toList());
 
             AtividadeDTO atividadeDTO = AtividadeDTO.builder()

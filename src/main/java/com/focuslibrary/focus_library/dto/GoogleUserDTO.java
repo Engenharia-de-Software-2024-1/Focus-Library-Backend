@@ -15,5 +15,5 @@ public class GoogleUserDTO {
     private String name;
     private String picture;
     private String locale;
-    private boolean verified_email;
+    private boolean verifiedEmail;
 } 

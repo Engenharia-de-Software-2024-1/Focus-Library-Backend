@@ -8,5 +8,5 @@ public interface AtividadeService {
 
     AtividadeDTO addAtividade(AtividadeDTO atividadeDTO);
 
-    List <AtividadeDTO> getUserAtividades();
+    List<AtividadeDTO> getUserAtividades();
 }
