@@ -42,11 +42,16 @@ public class GoogleAuthService {
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
 
-    public AuthResponseDTO authenticateWithGoogle(GoogleAuthRequestDTO request) {
+    public AuthResponseDTO authenticateWithGoogle(
+        final GoogleAuthRequestDTO request
+    ) {
         try {
-            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
-                    .setAudience(Collections.singletonList(clientId))
-                    .build();
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
+                new NetHttpTransport(),
+                new GsonFactory()
+            )
+                .setAudience(Collections.singletonList(clientId))
+                .build();
 
             GoogleIdToken idToken = verifier.verify(request.getToken());
             if (idToken == null) {
@@ -56,9 +61,10 @@ public class GoogleAuthService {
             Payload payload = idToken.getPayload();
             String googleId = payload.getSubject();
             String email = payload.getEmail();
-            
-            Optional<GoogleAccount> optionalGoogleAccount = googleAccountRepository.findByGoogleId(googleId);
-            
+
+            Optional<GoogleAccount> optionalGoogleAccount =
+                googleAccountRepository.findByGoogleId(googleId);
+
             if (optionalGoogleAccount.isPresent()) {
                 Usuario usuario = optionalGoogleAccount.get().getUsuario();
                 return tokenService.generateToken(usuario);
@@ -66,23 +72,27 @@ public class GoogleAuthService {
                 Usuario novoUsuario = Usuario.builder()
                         .username(email)
                         .email(email)
-                        .senha(passwordEncoder.encode(UUID.randomUUID().toString()))
+                        .senha(passwordEncoder.encode(
+                            UUID.randomUUID().toString()
+                        ))
                         .build();
-                
+
                 usuarioRepository.save(novoUsuario);
-                
+
                 GoogleAccount googleAccount = GoogleAccount.builder()
                         .googleId(googleId)
                         .usuario(novoUsuario)
                         .build();
-                
+
                 googleAccountRepository.save(googleAccount);
-                
+
                 return tokenService.generateToken(novoUsuario);
             }
-            
+
         } catch (GeneralSecurityException | IOException e) {
-            throw new RuntimeException("Erro ao verificar token Google: " + e.getMessage());
+            throw new RuntimeException(
+                "Erro ao verificar token Google: " + e.getMessage()
+            );
         }
     }
-} 
+}

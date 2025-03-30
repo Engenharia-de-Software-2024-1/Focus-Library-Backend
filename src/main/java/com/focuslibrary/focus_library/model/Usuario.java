@@ -53,9 +53,10 @@ public class Usuario implements UserDetails {
     @Builder.Default
     private List<Atividade> atividades = new ArrayList<>();
 
-    public void addAtividade(Atividade atividade){
-        if (this.atividades.contains(atividade))
+    public void addAtividade(final Atividade atividade) {
+        if (this.atividades.contains(atividade)) {
             return;
+        }
         this.atividades.add(atividade);
         atividade.setUsuario(this);
     }

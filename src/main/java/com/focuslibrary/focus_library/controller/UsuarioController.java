@@ -57,7 +57,7 @@ public class UsuarioController {
     public ResponseEntity<UsuarioResponseDTO> atualizarDadosGerais(
             @RequestBody @Valid TrocaDadosUserDTO userDTO,
             @PathVariable String idUser
-            ){
+            ) {
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.editarDadosGeraisUsuario(idUser, userDTO));
     }
 

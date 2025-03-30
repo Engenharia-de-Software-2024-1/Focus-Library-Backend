@@ -24,19 +24,26 @@ public class AuthServiceImp implements UserDetailsService {
     private ModelMapper modelMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(
+        final String username
+    ) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepository.findByUsername(username);
         if (usuario == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            throw new UsernameNotFoundException(
+                "User not found with username: " + username
+            );
         }
         return usuario;
     }
 
-    public UsuarioResponseDTO registrar(AuthRegisterDTO authDTO) {
+    public UsuarioResponseDTO registrar(
+        final AuthRegisterDTO authDTO
+    ) {
         if (usuarioRepository.findByUsername(authDTO.getUsername()) != null) {
             throw new FocusLibraryException("");
         }
-        String criptografado = new BCryptPasswordEncoder().encode(authDTO.getSenha());
+        String criptografado =
+            new BCryptPasswordEncoder().encode(authDTO.getSenha());
         Usuario usuario = modelMapper.map(authDTO, Usuario.class);
         usuario.setSenha(criptografado);
         usuarioRepository.save(usuario);

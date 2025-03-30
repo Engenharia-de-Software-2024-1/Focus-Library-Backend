@@ -31,7 +31,11 @@ public class Atividade {
     @Column(nullable = false)
     private LocalDate data;
 
-    @OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "atividade",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     @Builder.Default
     private List<Sessao> sessoes = new ArrayList<>();
 

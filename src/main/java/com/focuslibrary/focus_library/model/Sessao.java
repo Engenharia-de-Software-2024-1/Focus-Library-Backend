@@ -35,8 +35,14 @@ public class Sessao {
 
     @ManyToOne
     @JoinColumns({
-            @JoinColumn(name = "atividade_id", referencedColumnName = "atividade_id"),
-            @JoinColumn(name = "usuario_id", referencedColumnName = "usuario_id")
+            @JoinColumn(
+                name = "atividade_id",
+                referencedColumnName = "atividade_id"
+            ),
+            @JoinColumn(
+                name = "usuario_id",
+                referencedColumnName = "usuario_id"
+            )
     })
     @JsonIgnore
     private Atividade atividade;

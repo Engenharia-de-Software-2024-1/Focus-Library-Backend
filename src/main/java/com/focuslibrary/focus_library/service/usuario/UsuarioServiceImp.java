@@ -37,13 +37,14 @@ public class UsuarioServiceImp implements UsuarioService {
     @Autowired
     private ModelMapper modelMapper;
 
-    private Usuario validateAuthenticatedUser(String idUser) {
+    private Usuario validateAuthenticatedUser(final String idUser) {
         String username = TokenService.getUsernameUsuarioLogado();
         if (username == null) {
             throw new FocusLibraryException("Token inválido");
         }
-        
-        Usuario usuario = usuarioRepository.findById(idUser).orElseThrow(UsuarioNaoExisteException::new);
+
+        Usuario usuario = usuarioRepository.findById(idUser)
+                        .orElseThrow(UsuarioNaoExisteException::new);
         if (!usuario.getUsername().equals(username)) {
             throw new FocusLibraryException("Não autorizado");
         }
@@ -52,28 +53,37 @@ public class UsuarioServiceImp implements UsuarioService {
 
     public List<UsuarioResponseDTO> listarUsers() {
         return usuarioRepository.findAll().stream()
-                .map(usuario -> modelMapper.map(usuario, UsuarioResponseDTO.class))
+                .map(usuario -> modelMapper.map(
+                    usuario,
+                    UsuarioResponseDTO.class
+                ))
                 .collect(Collectors.toList());
     }
 
-    public void deleteUsuario(String idUser) {
+    public void deleteUsuario(final String idUser) {
         Usuario usuario = validateAuthenticatedUser(idUser);
         usuarioRepository.delete(usuario);
     }
 
-    public UsuarioResponseDTO editarUsuario(String idUser, UsuarioPostPutRequestDTO usuarioDTO) {
+    public UsuarioResponseDTO editarUsuario(
+        final String idUser,
+        final UsuarioPostPutRequestDTO usuarioDTO
+    ) {
         Usuario usuario = validateAuthenticatedUser(idUser);
-        
+
         modelMapper.map(usuarioDTO, usuario);
         if (usuarioDTO.getSenha() != null) {
             usuario.setSenha(passwordEncoder.encode(usuarioDTO.getSenha()));
         }
         usuario = usuarioRepository.save(usuario);
-        
+
         return modelMapper.map(usuario, UsuarioResponseDTO.class);
     }
 
-    public UsuarioResponseDTO editarDadosGeraisUsuario(String idUser, TrocaDadosUserDTO userDTO){
+    public UsuarioResponseDTO editarDadosGeraisUsuario(
+        final String idUser,
+        final TrocaDadosUserDTO userDTO
+    ) {
         Usuario usuario = validateAuthenticatedUser(idUser);
 
         usuario.setDataNascimento(userDTO.getDataNascimento());
@@ -85,7 +95,7 @@ public class UsuarioServiceImp implements UsuarioService {
         return modelMapper.map(usuario, UsuarioResponseDTO.class);
     }
 
-    public UsuarioResponseDTO getUsuario(String idUser) {
+    public UsuarioResponseDTO getUsuario(final String idUser) {
         Usuario usuario = validateAuthenticatedUser(idUser);
         UsuarioResponseDTO responseDTO = modelMapper.map(
             usuario,
