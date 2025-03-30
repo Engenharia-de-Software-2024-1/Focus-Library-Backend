@@ -1,5 +1,12 @@
 package com.focuslibrary.focus_library.service.sessao;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.focuslibrary.focus_library.config.security.TokenService;
 import com.focuslibrary.focus_library.dto.AtividadeDTO;
 import com.focuslibrary.focus_library.dto.SessaoDTO;
@@ -9,15 +16,9 @@ import com.focuslibrary.focus_library.model.AtividadeId;
 import com.focuslibrary.focus_library.model.Sessao;
 import com.focuslibrary.focus_library.model.Usuario;
 import com.focuslibrary.focus_library.repository.AtividadeRepository;
-import com.focuslibrary.focus_library.repository.SessaoRepository;
 import com.focuslibrary.focus_library.repository.UsuarioRepository;
+
 import jakarta.transaction.Transactional;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -28,12 +29,6 @@ public class AtividadeServiceImp implements AtividadeService {
 
     @Autowired
     private AtividadeRepository atividadeRepository;
-
-    @Autowired
-    private SessaoRepository sessaoRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
 
     private Usuario validateToken(){
         String username = TokenService.getUsernameUsuarioLogado();

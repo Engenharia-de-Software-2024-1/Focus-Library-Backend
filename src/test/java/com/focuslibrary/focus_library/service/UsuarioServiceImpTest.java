@@ -16,8 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.focuslibrary.focus_library.model.Atividade;
-import com.focuslibrary.focus_library.repository.AtividadeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,9 +31,9 @@ import com.focuslibrary.focus_library.dto.UsuarioPostPutRequestDTO;
 import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
 import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
 import com.focuslibrary.focus_library.exceptions.UsuarioNaoExisteException;
-import com.focuslibrary.focus_library.model.Sessao;
+import com.focuslibrary.focus_library.model.Atividade;
 import com.focuslibrary.focus_library.model.Usuario;
-import com.focuslibrary.focus_library.repository.SessaoRepository;
+import com.focuslibrary.focus_library.repository.AtividadeRepository;
 import com.focuslibrary.focus_library.repository.UsuarioRepository;
 import com.focuslibrary.focus_library.service.usuario.UsuarioServiceImp;
 

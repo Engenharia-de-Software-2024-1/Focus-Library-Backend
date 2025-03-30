@@ -6,22 +6,20 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.focuslibrary.focus_library.dto.TrocaDadosUserDTO;
-import com.focuslibrary.focus_library.model.Atividade;
-import com.focuslibrary.focus_library.repository.AtividadeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.focuslibrary.focus_library.config.security.TokenService;
+import com.focuslibrary.focus_library.dto.TrocaDadosUserDTO;
 import com.focuslibrary.focus_library.dto.UsuarioPostPutRequestDTO;
 import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
 import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
 import com.focuslibrary.focus_library.exceptions.UsuarioNaoExisteException;
-import com.focuslibrary.focus_library.model.Sessao;
+import com.focuslibrary.focus_library.model.Atividade;
 import com.focuslibrary.focus_library.model.Usuario;
-import com.focuslibrary.focus_library.repository.SessaoRepository;
+import com.focuslibrary.focus_library.repository.AtividadeRepository;
 import com.focuslibrary.focus_library.repository.UsuarioRepository;
 
 @Service

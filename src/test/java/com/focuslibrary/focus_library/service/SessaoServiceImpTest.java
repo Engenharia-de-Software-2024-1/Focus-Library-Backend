@@ -1,5 +1,28 @@
 package com.focuslibrary.focus_library.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import com.focuslibrary.focus_library.config.security.TokenService;
 import com.focuslibrary.focus_library.dto.AtividadeDTO;
 import com.focuslibrary.focus_library.dto.SessaoDTO;
@@ -11,22 +34,6 @@ import com.focuslibrary.focus_library.model.Usuario;
 import com.focuslibrary.focus_library.repository.AtividadeRepository;
 import com.focuslibrary.focus_library.repository.UsuarioRepository;
 import com.focuslibrary.focus_library.service.sessao.AtividadeServiceImp;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SessaoServiceImpTest {
@@ -46,10 +53,8 @@ class SessaoServiceImpTest {
     private List<SessaoDTO> sessoesDTO;
     private static final String USER_ID = "123";
     private static final String USERNAME = "testuser";
-    private static final Integer MINUTOS = 60;
     private static final String DATA = "2004-11-23";
     private static final String ATIVIDADE_ID = "1a";
-    private static final Long SESSAO_ID = 1L;
 
     @BeforeEach
     void setUp() {
