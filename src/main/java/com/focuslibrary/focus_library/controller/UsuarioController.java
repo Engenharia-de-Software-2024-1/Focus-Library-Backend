@@ -34,7 +34,9 @@ public class UsuarioController {
     }
 
     @GetMapping("/{idUser}")
-    public ResponseEntity<UsuarioResponseDTO> buscarUsuario(@PathVariable String idUser) {
+    public ResponseEntity<UsuarioResponseDTO> buscarUsuario(
+        @PathVariable final String idUser
+    ) {
         UsuarioResponseDTO usuario = usuarioService.getUsuario(idUser);
         return ResponseEntity.ok(usuario);
     }
@@ -47,23 +49,30 @@ public class UsuarioController {
 
     @PutMapping("/{idUser}")
     public ResponseEntity<UsuarioResponseDTO> atualizarUsuario(
-            @PathVariable String idUser,
-            @RequestBody UsuarioPostPutRequestDTO usuarioDTO) {
-        UsuarioResponseDTO usuario = usuarioService.editarUsuario(idUser, usuarioDTO);
+        @PathVariable final String idUser,
+        @RequestBody final UsuarioPostPutRequestDTO usuarioDTO
+    ) {
+        UsuarioResponseDTO usuario = usuarioService.editarUsuario(
+                                        idUser,
+                                        usuarioDTO
+                                    );
         return ResponseEntity.ok(usuario);
     }
 
     @PutMapping("/dadosgerais/{idUser}")
     public ResponseEntity<UsuarioResponseDTO> atualizarDadosGerais(
-            @RequestBody @Valid TrocaDadosUserDTO userDTO,
-            @PathVariable String idUser
-            ) {
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.editarDadosGeraisUsuario(idUser, userDTO));
+        @RequestBody @Valid final TrocaDadosUserDTO userDTO,
+        @PathVariable final String idUser
+    ) {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(usuarioService.editarDadosGeraisUsuario(idUser, userDTO));
     }
 
     @DeleteMapping("/{idUser}")
     public ResponseEntity<Void> deletarUsuario(
-            @PathVariable String idUser) {
+        @PathVariable final String idUser
+    ) {
         usuarioService.deleteUsuario(idUser);
         return ResponseEntity.noContent().build();
     }

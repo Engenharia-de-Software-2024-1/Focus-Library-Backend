@@ -25,8 +25,8 @@ public class AtividadeController {
 
     @PostMapping("")
     public ResponseEntity<AtividadeDTO> addAtividade(
-            @RequestBody @Valid AtividadeDTO atividadeDTO
-            ) {
+        @RequestBody @Valid final AtividadeDTO atividadeDTO
+    ) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(sessaoService.addAtividade(atividadeDTO));
     }

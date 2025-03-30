@@ -35,16 +35,19 @@ public class AuthController {
 
     @Autowired
     private TokenService tokenService;
-    
+
     @Autowired
     private GoogleAuthService googleAuthService;
 
 
     @PostMapping("/login")
     public ResponseEntity<?> login(
-            @RequestBody @Valid AuthRequestDTO authDTO
-            ) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getSenha());
+            @RequestBody @Valid final AuthRequestDTO authDTO
+    ) {
+        var usernamePassword = new UsernamePasswordAuthenticationToken(
+                                    authDTO.getUsername(),
+                                    authDTO.getSenha()
+                                );
         var auth = authenticationManager.authenticate(usernamePassword);
 
         var token = tokenService.generateToken((Usuario) auth.getPrincipal());
@@ -55,7 +58,8 @@ public class AuthController {
 
     @PostMapping("/registrar")
     public ResponseEntity<?> registrar(
-            @RequestBody @Valid AuthRegisterDTO authDTO) {
+            @RequestBody @Valid final AuthRegisterDTO authDTO
+    ) {
         try {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
@@ -64,12 +68,14 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-    
+
     @PostMapping("/google")
     public ResponseEntity<?> loginWithGoogle(
-            @RequestBody @Valid GoogleAuthRequestDTO googleAuthRequest) {
+            @RequestBody @Valid final GoogleAuthRequestDTO googleAuthRequest
+    ) {
         try {
-            AuthResponseDTO response = googleAuthService.authenticateWithGoogle(googleAuthRequest);
+            AuthResponseDTO response =
+            googleAuthService.authenticateWithGoogle(googleAuthRequest);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -79,7 +85,8 @@ public class AuthController {
 
     @GetMapping("/refresh")
     public ResponseEntity<?> refresh(
-            @RequestParam String refreshToken) {
+            @RequestParam final String refreshToken
+    ) {
         String token = tokenService.getAcessToken(refreshToken);
         System.out.println(refreshToken);
         return ResponseEntity.status(HttpStatus.CREATED).body(token);

@@ -17,7 +17,9 @@ import java.util.ArrayList;
 @ControllerAdvice
 public class ErrorHandlingControllerAdvice {
 
-    private CustomErrorType defaultCustomErrorTypeConstruct(String message) {
+    private CustomErrorType defaultCustomErrorTypeConstruct(
+        final String message
+    ) {
         return CustomErrorType.builder()
                 .timestamp(LocalDateTime.now())
                 .errors(new ArrayList<>())
@@ -28,7 +30,9 @@ public class ErrorHandlingControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public CustomErrorType onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public CustomErrorType onMethodArgumentNotValidException(
+        final MethodArgumentNotValidException e
+    ) {
         CustomErrorType customErrorType = defaultCustomErrorTypeConstruct(
                 "Erros de validacao encontrados"
         );
@@ -41,7 +45,9 @@ public class ErrorHandlingControllerAdvice {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public CustomErrorType onConstraintViolation(ConstraintViolationException e) {
+    public CustomErrorType onConstraintViolation(
+        final ConstraintViolationException e
+    ) {
         CustomErrorType customErrorType = defaultCustomErrorTypeConstruct(
                 "Erros de validacao encontrados"
         );
@@ -54,7 +60,9 @@ public class ErrorHandlingControllerAdvice {
     @ExceptionHandler(FocusLibraryException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public CustomErrorType onCommerceException(FocusLibraryException e) {
+    public CustomErrorType onCommerceException(
+        final FocusLibraryException e
+    ) {
         return defaultCustomErrorTypeConstruct(
                 e.getMessage()
         );
@@ -63,11 +71,17 @@ public class ErrorHandlingControllerAdvice {
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public CustomErrorType onDataIntegrityViolation(DataIntegrityViolationException e) {
-        String errorMessage = "Erro de integridade de dados. Verifique se há dados duplicados.";
+    public CustomErrorType onDataIntegrityViolation(
+        final DataIntegrityViolationException e
+    ) {
+        String errorMessage = "Erro de integridade de dados. "
+                + "Verifique se há dados duplicados.";
         String message = e.getCause() != null ? e.getCause().getMessage() : "";
-        if (message.contains("duplicate key value violates unique constraint")) {
-            errorMessage = "Violação de chave única encontrada. Verifique os dados fornecidos.";
+        if (message.contains(
+                "duplicate key value violates unique constraint"
+            )) {
+            errorMessage = "Violação de chave única encontrada. "
+            + "Verifique os dados fornecidos.";
         }
 
         return defaultCustomErrorTypeConstruct(errorMessage);

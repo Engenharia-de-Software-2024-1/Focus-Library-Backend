@@ -23,7 +23,7 @@ public class CustomErrorType {
     @JsonProperty("errors")
     private List<String> errors;
 
-    public CustomErrorType(FocusLibraryException e) {
+    public CustomErrorType(final FocusLibraryException e) {
         this.timestamp = LocalDateTime.now();
         this.message = e.getMessage();
         this.errors = new ArrayList<>();
