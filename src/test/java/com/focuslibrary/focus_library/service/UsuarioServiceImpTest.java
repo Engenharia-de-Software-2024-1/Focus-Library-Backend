@@ -12,6 +12,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.focuslibrary.focus_library.config.security.TokenService;
+import com.focuslibrary.focus_library.dto.TrocaDadosUserDTO;
 import com.focuslibrary.focus_library.dto.UsuarioPostPutRequestDTO;
 import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
 import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
@@ -270,6 +272,145 @@ class UsuarioServiceImpTest {
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals(2L, result.get(0).getStreak());
+        assertEquals(1L, result.get(1).getStreak());
+    }
+
+    @Test
+    void editarDadosGeraisUsuario_ValidUser_ShouldUpdateGeneralData() {
+        try (MockedStatic<TokenService> tokenServiceMock = mockStatic(TokenService.class)) {
+            // Arrange
+            tokenServiceMock.when(TokenService::getUsernameUsuarioLogado).thenReturn(USERNAME);
+            when(usuarioRepository.findById(USER_ID)).thenReturn(Optional.of(usuario));
+            TrocaDadosUserDTO newData = new TrocaDadosUserDTO();
+            newData.setUsername("newUsername");
+            newData.setEmail("new@example.com");
+            newData.setDataNascimento(LocalDate.of(2000, 1, 1));
+            
+            // Act
+            UsuarioResponseDTO result = usuarioService.editarDadosGeraisUsuario(USER_ID, newData);
+            
+            // Assert
+            assertEquals("newUsername", usuario.getUsername());
+            assertEquals("new@example.com", usuario.getEmail());
+            assertEquals(LocalDate.of(2000, 1, 1), usuario.getDataNascimento());
+            verify(usuarioRepository).save(usuario);
+        }
+    }
+
+    @Test
+    void editarDadosGeraisUsuario_UnauthorizedUser_ShouldThrowException() {
+        try (MockedStatic<TokenService> tokenServiceMock = mockStatic(TokenService.class)) {
+            // Arrange
+            tokenServiceMock.when(TokenService::getUsernameUsuarioLogado).thenReturn("anotherUser");
+            when(usuarioRepository.findById(USER_ID)).thenReturn(Optional.of(usuario));
+            
+            // Act & Assert
+            assertThrows(FocusLibraryException.class, 
+                () -> usuarioService.editarDadosGeraisUsuario(USER_ID, new TrocaDadosUserDTO()));
+        }
+    }
+
+    @Test
+    void getUsuarioByToken_ValidToken_ShouldReturnUser() {
+        try (MockedStatic<TokenService> tokenServiceMock = mockStatic(TokenService.class)) {
+            // Arrange
+            tokenServiceMock.when(TokenService::getUsernameUsuarioLogado).thenReturn(USERNAME);
+            when(usuarioRepository.findByUsername(USERNAME)).thenReturn(usuario);
+            when(modelMapper.map(usuario, UsuarioResponseDTO.class)).thenReturn(usuarioResponseDTO);
+            
+            // Act
+            UsuarioResponseDTO result = usuarioService.getUsuarioByToken();
+            
+            // Assert
+            assertEquals(USER_ID, result.getUserId());
+        }
+    }
+
+    @Test
+    void getUsuarioByToken_InvalidToken_ShouldThrowException() {
+        try (MockedStatic<TokenService> tokenServiceMock = mockStatic(TokenService.class)) {
+            // Arrange
+            tokenServiceMock.when(TokenService::getUsernameUsuarioLogado).thenReturn(null);
+            
+            // Act & Assert
+            assertThrows(FocusLibraryException.class, () -> usuarioService.getUsuarioByToken());
+        }
+    }
+
+    @Test
+    void getUsuario_WithBrokenStreak_ShouldReturnZeroStreak() {
+        try (MockedStatic<TokenService> tokenServiceMock = mockStatic(TokenService.class)) {
+            // Arrange
+            tokenServiceMock.when(TokenService::getUsernameUsuarioLogado).thenReturn(USERNAME);
+            when(usuarioRepository.findById(USER_ID)).thenReturn(Optional.of(usuario));
+            
+            List<Sessao> sessoes = Arrays.asList(
+                Sessao.builder().data(LocalDate.now().minusDays(3)).build(),
+                Sessao.builder().data(LocalDate.now().minusDays(5)).build()
+            );
+            when(sessaoRepository.findByUsuario(usuario)).thenReturn(sessoes);
+            when(modelMapper.map(any(Usuario.class), eq(UsuarioResponseDTO.class))).thenReturn(usuarioResponseDTO);
+
+            // Act
+            UsuarioResponseDTO result = usuarioService.getUsuario(USER_ID);
+
+            // Assert
+            assertEquals(0L, result.getStreak());
+        }
+    }
+
+    @Test
+    void getUsuario_WithNoSessions_ShouldReturnZeroStreak() {
+        try (MockedStatic<TokenService> tokenServiceMock = mockStatic(TokenService.class)) {
+            // Arrange
+            tokenServiceMock.when(TokenService::getUsernameUsuarioLogado).thenReturn(USERNAME);
+            when(usuarioRepository.findById(USER_ID)).thenReturn(Optional.of(usuario));
+            when(sessaoRepository.findByUsuario(usuario)).thenReturn(List.of());
+            
+            when(modelMapper.map(any(Usuario.class), eq(UsuarioResponseDTO.class))).thenReturn(usuarioResponseDTO);
+
+            // Act
+            UsuarioResponseDTO result = usuarioService.getUsuario(USER_ID);
+
+            // Assert
+            assertEquals(0L, result.getStreak());
+        }
+    }
+
+    @Test
+    void getRanking_WithConsecutiveDays_ShouldReturnCorrectStreak() {
+        // Arrange
+        Usuario usuario2 = Usuario.builder()
+                .userId("456")
+                .username("user2")
+                .build();
+
+        List<Sessao> sessoesUsuario1 = new ArrayList<>(Arrays.asList(
+            Sessao.builder().data(LocalDate.now().minusDays(2)).build(),
+            Sessao.builder().data(LocalDate.now().minusDays(1)).build(),
+            Sessao.builder().data(LocalDate.now()).build()
+        ));
+        
+        List<Sessao> sessoesUsuario2 = new ArrayList<>(List.of(
+            Sessao.builder().data(LocalDate.now()).build()
+        ));
+
+        when(usuarioRepository.findAll()).thenReturn(Arrays.asList(usuario, usuario2));
+        when(sessaoRepository.findByUsuario(usuario)).thenReturn(sessoesUsuario1);
+        when(sessaoRepository.findByUsuario(usuario2)).thenReturn(sessoesUsuario2);
+        
+        when(modelMapper.map(usuario, UsuarioResponseDTO.class)).thenReturn(
+            UsuarioResponseDTO.builder().userId(USER_ID).build() // Streak será calculado
+        );
+        when(modelMapper.map(usuario2, UsuarioResponseDTO.class)).thenReturn(
+            UsuarioResponseDTO.builder().userId("456").build()
+        );
+
+        // Act
+        List<UsuarioResponseDTO> result = usuarioService.getRanking();
+
+        // Assert
+        assertEquals(3L, result.get(0).getStreak());
         assertEquals(1L, result.get(1).getStreak());
     }
 } 
