@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.focuslibrary.focus_library.dto.TrocaDadosUserDTO;
 import com.focuslibrary.focus_library.dto.UsuarioPostPutRequestDTO;
 import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
 import com.focuslibrary.focus_library.service.usuario.UsuarioService;
@@ -124,5 +125,40 @@ class UsuarioControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedRanking, response.getBody());
         verify(usuarioService).getRanking();
+    }
+
+    @Test
+    void getUsuarioToken_ShouldReturnUserByToken() {
+        // Arrange
+        when(usuarioService.getUsuarioByToken()).thenReturn(usuarioResponseDTO);
+
+        // Act
+        ResponseEntity<UsuarioResponseDTO> response = usuarioController.getUsuarioToken();
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(usuarioResponseDTO, response.getBody());
+        verify(usuarioService).getUsuarioByToken();
+    }
+
+    @Test
+    void atualizarDadosGerais_ShouldUpdateAndReturnUser() {
+        // Arrange
+        TrocaDadosUserDTO trocaDadosUserDTO = new TrocaDadosUserDTO();
+        trocaDadosUserDTO.setUsername("Updated User");
+        trocaDadosUserDTO.setEmail("updated@example.com");
+        // Populate other fields as needed
+
+        when(usuarioService.editarDadosGeraisUsuario(idUser, trocaDadosUserDTO)).thenReturn(usuarioResponseDTO);
+
+        // Act
+        ResponseEntity<UsuarioResponseDTO> response = usuarioController.atualizarDadosGerais(trocaDadosUserDTO, idUser);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(usuarioResponseDTO, response.getBody());
+        verify(usuarioService).editarDadosGeraisUsuario(idUser, trocaDadosUserDTO);
     }
 } 

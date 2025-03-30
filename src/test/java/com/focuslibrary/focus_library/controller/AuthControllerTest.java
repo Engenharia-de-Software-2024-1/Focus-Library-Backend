@@ -5,6 +5,7 @@ import com.focuslibrary.focus_library.dto.AuthResponseDTO;
 import com.focuslibrary.focus_library.dto.AuthRegisterDTO;
 import com.focuslibrary.focus_library.dto.GoogleAuthRequestDTO;
 import com.focuslibrary.focus_library.dto.UsuarioResponseDTO;
+import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
 import com.focuslibrary.focus_library.model.Usuario;
 import com.focuslibrary.focus_library.config.security.TokenService;
 import com.focuslibrary.focus_library.service.auth.AuthServiceImp;
@@ -24,6 +25,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class AuthControllerTest {
@@ -128,4 +130,37 @@ class AuthControllerTest {
         assertEquals(expectedToken, response.getBody());
         verify(tokenService).getAcessToken(refreshToken);
     }
+
+    @Test
+    void loginWithGoogle_WithInvalidToken_ShouldReturnBadRequest() {
+        // Arrange
+        GoogleAuthRequestDTO googleAuthRequest = new GoogleAuthRequestDTO();
+        when(googleAuthService.authenticateWithGoogle(any(GoogleAuthRequestDTO.class)))
+                .thenThrow(new RuntimeException("Google authentication failed"));
+
+        // Act
+        ResponseEntity<?> response = authController.loginWithGoogle(googleAuthRequest);
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Erro na autenticação com Google: Google authentication failed", response.getBody());
+        verify(googleAuthService).authenticateWithGoogle(any(GoogleAuthRequestDTO.class));
+    }
+
+       @Test
+        void registrar_WithFocusLibraryException_ShouldReturnBadRequest() {
+            // Arrange
+            AuthRegisterDTO authDTO = new AuthRegisterDTO();
+            when(authServiceImp.registrar(any(AuthRegisterDTO.class)))
+                    .thenThrow(new FocusLibraryException("Registration failed"));
+
+            // Act
+            ResponseEntity<?> response = authController.registrar(authDTO);
+
+            // Assert
+            assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+            verify(authServiceImp).registrar(any(AuthRegisterDTO.class));
+        }
+
+
 } 
