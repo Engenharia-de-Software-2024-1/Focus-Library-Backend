@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.focuslibrary.focus_library.dto.AtividadeDTO;
 
-public interface SessaoService {
+public interface AtividadeService {
 
     AtividadeDTO addAtividade(AtividadeDTO atividadeDTO);
 

@@ -1,7 +1,7 @@
 package com.focuslibrary.focus_library.controller;
 
 import com.focuslibrary.focus_library.dto.AtividadeDTO;
-import com.focuslibrary.focus_library.service.sessao.SessaoService;
+import com.focuslibrary.focus_library.service.sessao.AtividadeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,13 +12,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("sessao")
-public class SessaoController {
+public class AtividadeController {
 
     @Autowired
-    private SessaoService sessaoService;
+    private AtividadeService sessaoService;
 
     @PostMapping("")
-    public ResponseEntity<AtividadeDTO> addSessao(
+    public ResponseEntity<AtividadeDTO> addAtividade(
             @RequestBody @Valid AtividadeDTO atividadeDTO
             ) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -26,7 +26,7 @@ public class SessaoController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<AtividadeDTO>> getAllSessao() {
+    public ResponseEntity<List<AtividadeDTO>> getAllAtividade() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(sessaoService.getUserAtividades());
     }

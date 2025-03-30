@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class SessaoServiceImp implements SessaoService {
+public class AtividadeServiceImp implements AtividadeService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;

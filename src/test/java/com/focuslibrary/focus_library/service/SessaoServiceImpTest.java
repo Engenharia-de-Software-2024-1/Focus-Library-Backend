@@ -9,11 +9,9 @@ import com.focuslibrary.focus_library.model.AtividadeId;
 import com.focuslibrary.focus_library.model.Sessao;
 import com.focuslibrary.focus_library.model.Usuario;
 import com.focuslibrary.focus_library.repository.AtividadeRepository;
-import com.focuslibrary.focus_library.repository.SessaoRepository;
 import com.focuslibrary.focus_library.repository.UsuarioRepository;
-import com.focuslibrary.focus_library.service.sessao.SessaoServiceImp;
+import com.focuslibrary.focus_library.service.sessao.AtividadeServiceImp;
 
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,9 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,7 +38,7 @@ class SessaoServiceImpTest {
     private AtividadeRepository atividadeRepository;
 
     @InjectMocks
-    private SessaoServiceImp sessaoService;
+    private AtividadeServiceImp sessaoService;
 
     private Usuario usuario;
     private AtividadeDTO atividadeDTO;

@@ -2,8 +2,7 @@ package com.focuslibrary.focus_library.controller;
 
 import com.focuslibrary.focus_library.dto.AtividadeDTO;
 import com.focuslibrary.focus_library.dto.SessaoDTO;
-import com.focuslibrary.focus_library.service.sessao.SessaoService;
-import com.focuslibrary.focus_library.service.sessao.SessaoServiceImp;
+import com.focuslibrary.focus_library.service.sessao.AtividadeServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,10 +22,10 @@ import static org.mockito.Mockito.*;
 class SessaoControllerTest {
 
     @Mock
-    private SessaoServiceImp atividadeService;
+    private AtividadeServiceImp atividadeService;
 
     @InjectMocks
-    private SessaoController atividadeController;
+    private AtividadeController atividadeController;
 
     @BeforeEach
     void setUp() {
@@ -50,7 +49,7 @@ class SessaoControllerTest {
         when(atividadeService.addAtividade(any(AtividadeDTO.class))).thenReturn(expectedResponse);
 
         // Act
-        ResponseEntity<AtividadeDTO> response = atividadeController.addSessao(requestDTO);
+        ResponseEntity<AtividadeDTO> response = atividadeController.addAtividade(requestDTO);
 
         // Assert
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -79,7 +78,7 @@ class SessaoControllerTest {
         when(atividadeService.getUserAtividades()).thenReturn(expectedResponses);
 
         // Act
-        ResponseEntity<List<AtividadeDTO>> response = atividadeController.getAllSessao();
+        ResponseEntity<List<AtividadeDTO>> response = atividadeController.getAllAtividade();
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
