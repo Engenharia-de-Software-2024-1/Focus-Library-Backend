@@ -29,7 +29,7 @@ public class UsuarioResponseDTO {
     @JsonProperty("streak")
     private Long streak;
 
-    public UsuarioResponseDTO(Usuario usuario) {
+    public UsuarioResponseDTO(final Usuario usuario) {
         this.userId = usuario.getUserId();
         this.username = usuario.getUsername();
         this.email = usuario.getEmail();

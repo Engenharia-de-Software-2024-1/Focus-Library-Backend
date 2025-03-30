@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AtividadeRepository extends JpaRepository<Atividade, AtividadeId> {
+public interface AtividadeRepository
+extends JpaRepository<Atividade, AtividadeId> {
     List<Atividade> findByUsuario(Usuario usuario);
 }

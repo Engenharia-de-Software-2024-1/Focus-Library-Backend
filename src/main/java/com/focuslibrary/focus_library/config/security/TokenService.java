@@ -30,7 +30,7 @@ public class TokenService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public AuthResponseDTO generateToken(Usuario usuario) {
+    public AuthResponseDTO generateToken(final Usuario usuario) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(chave);
             String acessToken = JWT.create()
@@ -51,9 +51,12 @@ public class TokenService {
     }
 
     public static String getUsernameUsuarioLogado() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
 
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+        if (authentication != null
+            && authentication.getPrincipal() instanceof UserDetails) {
             return ((UserDetails) authentication.getPrincipal()).getUsername();
         } else if (authentication != null) {
             return authentication.getPrincipal().toString();
@@ -61,7 +64,7 @@ public class TokenService {
         return null;
     }
 
-    public String validateToken(String token) {
+    public String validateToken(final String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(chave);
             return JWT.require(algorithm)
@@ -74,11 +77,12 @@ public class TokenService {
         }
     }
 
-    public String getAcessToken(String refreshToken) {
+    public String getAcessToken(final String refreshToken) {
         try {
             String idUsuario = validateToken(refreshToken);
             System.out.println(idUsuario);
-            Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow(InvalidRefreshToken::new);
+            Usuario usuario = usuarioRepository
+                    .findById(idUsuario).orElseThrow(InvalidRefreshToken::new);
 
             Algorithm algorithm = Algorithm.HMAC256(chave);
             return JWT.create()
@@ -92,10 +96,14 @@ public class TokenService {
     }
 
     private Instant getRefreshExpirationData() {
-        return LocalDateTime.now().plusDays(7).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now()
+        .plusWeeks(1)
+        .toInstant(ZoneOffset.of("-03:00"));
     }
 
     private Instant getAcessExpirationData() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now()
+        .plusHours(2)
+        .toInstant(ZoneOffset.of("-03:00"));
     }
 }

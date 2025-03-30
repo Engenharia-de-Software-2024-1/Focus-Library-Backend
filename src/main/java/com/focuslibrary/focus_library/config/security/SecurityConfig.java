@@ -19,26 +19,45 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Autowired
-    SecurityFilter securityFilter;
+    private SecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+        final HttpSecurity httpSecurity
+    ) throws Exception {
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session ->
+                    session.sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS
+                    )
+                )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/registrar").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/google").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/auth/refresh").permitAll()
-                        .requestMatchers("/oauth2/**").permitAll()
+                        .requestMatchers(
+                            HttpMethod.POST,
+                            "/auth/login"
+                        ).permitAll()
+                        .requestMatchers(
+                            HttpMethod.POST,
+                            "/auth/registrar"
+                        ).permitAll()
+                        .requestMatchers(
+                            HttpMethod.POST,
+                            "/auth/google").permitAll()
+                        .requestMatchers(
+                            HttpMethod.GET,
+                            "/auth/refresh").permitAll()
                         .anyRequest().authenticated())
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(
+                    securityFilter,
+                    UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+    public AuthenticationManager authenticationManager(
+        final AuthenticationConfiguration configuration
+    ) throws Exception {
         return configuration.getAuthenticationManager();
     }
 

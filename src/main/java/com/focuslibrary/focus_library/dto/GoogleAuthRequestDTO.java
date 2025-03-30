@@ -13,4 +13,4 @@ import lombok.NoArgsConstructor;
 public class GoogleAuthRequestDTO {
     @NotBlank(message = "Token do Google é obrigatório")
     private String token;
-} 
+}

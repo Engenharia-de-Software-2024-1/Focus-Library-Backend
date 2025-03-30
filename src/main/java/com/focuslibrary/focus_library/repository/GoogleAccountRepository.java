@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface GoogleAccountRepository extends JpaRepository<GoogleAccount, String> {
+public interface GoogleAccountRepository
+extends JpaRepository<GoogleAccount, String> {
     Optional<GoogleAccount> findByGoogleId(String googleId);
-} 
+}
