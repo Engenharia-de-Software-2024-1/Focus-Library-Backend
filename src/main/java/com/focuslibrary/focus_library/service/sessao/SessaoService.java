@@ -2,14 +2,11 @@ package com.focuslibrary.focus_library.service.sessao;
 
 import java.util.List;
 
-import com.focuslibrary.focus_library.dto.SessaoPostPutRequestDTO;
-import com.focuslibrary.focus_library.dto.SessaoResponseDTO;
+import com.focuslibrary.focus_library.dto.AtividadeDTO;
 
 public interface SessaoService {
 
-    SessaoResponseDTO addSessao(SessaoPostPutRequestDTO sessaoDTO);
+    AtividadeDTO addAtividade(AtividadeDTO atividadeDTO);
 
-    List<SessaoResponseDTO> addSessao(List<SessaoPostPutRequestDTO> sessaoDTO);
-
-    List <SessaoResponseDTO> getUserSessao();
+    List <AtividadeDTO> getUserAtividades();
 }

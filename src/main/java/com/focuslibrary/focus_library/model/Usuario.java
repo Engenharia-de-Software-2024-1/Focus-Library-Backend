@@ -39,12 +39,15 @@ public class Usuario implements UserDetails {
     @JsonProperty("dataNascimento")
     private LocalDate dataNascimento;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<Sessao> sessoes = new ArrayList<>();
+    private List<Atividade> atividades = new ArrayList<>();
 
-    public void addSessao(Sessao sessao){
-        if(!sessoes.contains(sessao)){sessoes.add(sessao);}
+    public void addAtividade(Atividade atividade){
+        if (this.atividades.contains(atividade))
+            return;
+        this.atividades.add(atividade);
+        atividade.setUsuario(this);
     }
 
     @Override

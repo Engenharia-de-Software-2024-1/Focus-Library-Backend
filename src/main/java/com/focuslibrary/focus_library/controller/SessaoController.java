@@ -1,6 +1,6 @@
 package com.focuslibrary.focus_library.controller;
 
-import com.focuslibrary.focus_library.dto.SessaoPostPutRequestDTO;
+import com.focuslibrary.focus_library.dto.AtividadeDTO;
 import com.focuslibrary.focus_library.service.sessao.SessaoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,26 +18,16 @@ public class SessaoController {
     private SessaoService sessaoService;
 
     @PostMapping("")
-    public ResponseEntity<?> addSessao(
-            @RequestBody @Valid SessaoPostPutRequestDTO sessaoDTO
+    public ResponseEntity<AtividadeDTO> addSessao(
+            @RequestBody @Valid AtividadeDTO atividadeDTO
             ) {
-        System.out.println("addSessao");
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(sessaoService.addSessao(sessaoDTO));
-    }
-
-    @PostMapping("/addlist")
-    public ResponseEntity<?> addSessaoList(
-            @RequestBody List<@Valid SessaoPostPutRequestDTO> sessaoDTO
-    ){
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(sessaoService.addSessao(sessaoDTO));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(sessaoService.addAtividade(atividadeDTO));
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllSessao() {
-        return ResponseEntity.status(HttpStatus.OK).body(sessaoService.getUserSessao());
+    public ResponseEntity<List<AtividadeDTO>> getAllSessao() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(sessaoService.getUserAtividades());
     }
 }

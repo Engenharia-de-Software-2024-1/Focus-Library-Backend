@@ -1,8 +1,6 @@
 package com.focuslibrary.focus_library.controller;
 
-import com.focuslibrary.focus_library.dto.SessaoPostPutRequestDTO;
-import com.focuslibrary.focus_library.dto.SessaoResponseDTO;
-import com.focuslibrary.focus_library.model.SessaoId;
+import com.focuslibrary.focus_library.dto.SessaoDTO;
 import com.focuslibrary.focus_library.service.sessao.SessaoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +39,7 @@ class SessaoControllerTest {
         requestDTO.setData("2024-03-16");
         requestDTO.setIdSessao(1L);
 
-        SessaoResponseDTO expectedResponse = SessaoResponseDTO.builder()
+        SessaoDTO expectedResponse = SessaoDTO.builder()
                 .sessaoId(new SessaoId())
                 .data(LocalDate.parse("2024-03-16"))
                 .minutos(60)
@@ -74,19 +72,19 @@ class SessaoControllerTest {
 
         List<SessaoPostPutRequestDTO> requestDTOs = Arrays.asList(requestDTO1, requestDTO2);
 
-        SessaoResponseDTO responseDTO1 = SessaoResponseDTO.builder()
+        SessaoDTO responseDTO1 = SessaoDTO.builder()
                 .sessaoId(new SessaoId())
                 .data(LocalDate.parse("2024-03-16"))
                 .minutos(60)
                 .build();
 
-        SessaoResponseDTO responseDTO2 = SessaoResponseDTO.builder()
+        SessaoDTO responseDTO2 = SessaoDTO.builder()
                 .sessaoId(new SessaoId())
                 .data(LocalDate.parse("2024-03-17"))
                 .minutos(30)
                 .build();
 
-        List<SessaoResponseDTO> expectedResponses = Arrays.asList(responseDTO1, responseDTO2);
+        List<SessaoDTO> expectedResponses = Arrays.asList(responseDTO1, responseDTO2);
 
         when(sessaoService.addSessao(anyList())).thenReturn(expectedResponses);
 
@@ -103,19 +101,19 @@ class SessaoControllerTest {
     @Test
     void getAllSessao_ShouldReturnOkStatusAndListOfResponseDTO() {
         // Arrange
-        SessaoResponseDTO responseDTO1 = SessaoResponseDTO.builder()
+        SessaoDTO responseDTO1 = SessaoDTO.builder()
                 .sessaoId(new SessaoId())
                 .data(LocalDate.parse("2024-03-16"))
                 .minutos(60)
                 .build();
 
-        SessaoResponseDTO responseDTO2 = SessaoResponseDTO.builder()
+        SessaoDTO responseDTO2 = SessaoDTO.builder()
                 .sessaoId(new SessaoId())
                 .data(LocalDate.parse("2024-03-17"))
                 .minutos(30)
                 .build();
 
-        List<SessaoResponseDTO> expectedResponses = Arrays.asList(responseDTO1, responseDTO2);
+        List<SessaoDTO> expectedResponses = Arrays.asList(responseDTO1, responseDTO2);
 
         when(sessaoService.getUserSessao()).thenReturn(expectedResponses);
 

@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class SessaoId {
+public class AtividadeId {
 
-    @Column(name = "sessao_id")
-    private Long sessaoId;
+    @Column(name = "atividade_id")
+    private String atividadeId;
 
     @Column(name = "usuario_id")
     private String usuarioId;

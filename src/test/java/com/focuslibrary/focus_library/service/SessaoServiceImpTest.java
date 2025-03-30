@@ -1,8 +1,7 @@
 package com.focuslibrary.focus_library.service;
 
 import com.focuslibrary.focus_library.config.security.TokenService;
-import com.focuslibrary.focus_library.dto.SessaoPostPutRequestDTO;
-import com.focuslibrary.focus_library.dto.SessaoResponseDTO;
+import com.focuslibrary.focus_library.dto.SessaoDTO;
 import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
 import com.focuslibrary.focus_library.model.Sessao;
 import com.focuslibrary.focus_library.model.SessaoId;
@@ -77,7 +76,7 @@ class SessaoServiceImpTest {
             when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
 
             // Act
-            SessaoResponseDTO result = sessaoService.addSessao(sessaoDTO);
+            SessaoDTO result = sessaoService.addSessao(sessaoDTO);
 
             // Assert
             assertNotNull(result);
@@ -133,7 +132,7 @@ class SessaoServiceImpTest {
             List<SessaoPostPutRequestDTO> sessoesDTO = Arrays.asList(sessaoDTO, sessaoDTO2);
 
             // Act
-            List<SessaoResponseDTO> result = sessaoService.addSessao(sessoesDTO);
+            List<SessaoDTO> result = sessaoService.addSessao(sessoesDTO);
 
             // Assert
             assertNotNull(result);
@@ -158,7 +157,7 @@ class SessaoServiceImpTest {
             when(sessaoRepository.findByUsuario(usuario)).thenReturn(Arrays.asList(sessao));
 
             // Act
-            List<SessaoResponseDTO> result = sessaoService.getUserSessao();
+            List<SessaoDTO> result = sessaoService.getUserSessao();
 
             // Assert
             assertNotNull(result);

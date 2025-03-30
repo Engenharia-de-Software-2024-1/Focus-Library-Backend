@@ -1,22 +1,24 @@
 package com.focuslibrary.focus_library.service.sessao;
 
 import com.focuslibrary.focus_library.config.security.TokenService;
-import com.focuslibrary.focus_library.dto.SessaoPostPutRequestDTO;
-import com.focuslibrary.focus_library.dto.SessaoResponseDTO;
+import com.focuslibrary.focus_library.dto.AtividadeDTO;
+import com.focuslibrary.focus_library.dto.SessaoDTO;
 import com.focuslibrary.focus_library.exceptions.FocusLibraryException;
+import com.focuslibrary.focus_library.model.Atividade;
+import com.focuslibrary.focus_library.model.AtividadeId;
 import com.focuslibrary.focus_library.model.Sessao;
-import com.focuslibrary.focus_library.model.SessaoId;
 import com.focuslibrary.focus_library.model.Usuario;
+import com.focuslibrary.focus_library.repository.AtividadeRepository;
 import com.focuslibrary.focus_library.repository.SessaoRepository;
 import com.focuslibrary.focus_library.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 public class SessaoServiceImp implements SessaoService {
@@ -25,83 +27,71 @@ public class SessaoServiceImp implements SessaoService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private AtividadeRepository atividadeRepository;
+
+    @Autowired
     private SessaoRepository sessaoRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     private Usuario validateToken(){
         String username = TokenService.getUsernameUsuarioLogado();
-        if (username == null) {throw new FocusLibraryException("Token invalido");}
         return usuarioRepository.findByUsername(username);
     }
 
-    private SessaoId validateSessao(Long sessaoDTOId, String userId){
-        SessaoId sessaoId = new SessaoId(sessaoDTOId, userId);
-        if (sessaoRepository.findById(sessaoId).isPresent())
-            throw new FocusLibraryException("Sessao Ja Cadastrada");
-        return sessaoId;
-    }
-
-    private LocalDate formatDate(String date){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return LocalDate.parse(date, formatter);
-    }
-
-    private Sessao buildSessao(Integer minutos, Usuario usuario, SessaoId sessaoId, LocalDate data){
-        return Sessao.builder()
-                .sessaoId(sessaoId)
-                .data(data)
-                .usuario(usuario)
-                .minutos(minutos)
-                .build();
-    }
-
+    @Transactional
     @Override
-    public SessaoResponseDTO addSessao(SessaoPostPutRequestDTO sessaoDTO) {
-
+    public AtividadeDTO addAtividade(AtividadeDTO atividadeDTO) {
         Usuario usuario = validateToken();
 
-        SessaoId sessaoId = validateSessao(sessaoDTO.getIdSessao(), usuario.getUserId());
+        AtividadeId atividadeId = new AtividadeId();
+        atividadeId.setAtividadeId(atividadeDTO.getAtividadeId());
+        atividadeId.setUsuarioId(usuario.getUserId());
 
-        LocalDate data = formatDate(sessaoDTO.getData());
+        if (atividadeRepository.existsById(atividadeId))
+            throw new FocusLibraryException("Id Atividade Incvalido");
 
-        Sessao sessao = buildSessao(sessaoDTO.getMinutos(), usuario, sessaoId, data);
+        Atividade atividade = new Atividade();
+        atividade.setUsuario(usuario);
+        atividade.setData(atividadeDTO.getData());
+        atividade.setAtividadeId(atividadeId);
 
-        sessaoRepository.save(sessao);
-        usuario.addSessao(sessao);
-        usuarioRepository.save(usuario);
-
-        return SessaoResponseDTO.builder()
-                .sessaoId(sessaoId)
-                .data(data)
-                .minutos(sessaoDTO.getMinutos())
-                .build();
-    }
-
-    @Override
-    public List<SessaoResponseDTO> addSessao(List<SessaoPostPutRequestDTO> sessaoDTO) {
-        List<Sessao> sessoes = new ArrayList<>();
-        for (SessaoPostPutRequestDTO s : sessaoDTO) {
-            try {
-                Usuario usuario = validateToken();
-                SessaoId sessaoId = validateSessao(s.getIdSessao(), usuario.getUserId());
-                LocalDate data = formatDate(s.getData());
-                sessoes.add(buildSessao(s.getMinutos(), usuario, sessaoId, data));
-            } catch (Exception e) {
-                continue;
-            }
+        if(atividadeDTO.getSessoes() != null) {
+            List<Sessao> sessoes = atividadeDTO.getSessoes().stream()
+                    .map(sessaoDTO -> {
+                        Sessao sessao = new Sessao();
+                        sessao.setSegundos_descanso(sessaoDTO.getSegundos_descanso());
+                        sessao.setSegundos_foco(sessaoDTO.getSegundos_foco());
+                        sessao.setAtividade(atividade);
+                        return sessao;
+                    })
+                    .collect(Collectors.toList());
+            atividade.setSessoes(sessoes);
         }
-        sessaoRepository.saveAll(sessoes);
-        return sessoes.stream()
-                .map(sessao -> new SessaoResponseDTO(sessao.getSessaoId(), sessao.getData(), sessao.getMinutos()))
-                .collect(Collectors.toList());
+
+        usuario.addAtividade(atividade);
+        usuarioRepository.save(usuario);
+        return atividadeDTO;
     }
 
     @Override
-    public List<SessaoResponseDTO> getUserSessao() {
+    public List<AtividadeDTO> getUserAtividades() {
         Usuario usuario = validateToken();
-        List<Sessao> sessoes = sessaoRepository.findByUsuario(usuario);
-        return sessoes.stream()
-                .map(sessao -> new SessaoResponseDTO(sessao.getSessaoId(), sessao.getData(), sessao.getMinutos()))
-                .collect(Collectors.toList());
-    }
+        List<Atividade> atividades = usuario.getAtividades();
+        List<AtividadeDTO> response = new ArrayList<>();
+        for (Atividade atividade: atividades){
+            List<SessaoDTO> sessoesDTO = atividade.getSessoes().stream()
+                    .map(sessao -> new SessaoDTO(sessao.getSegundos_descanso(), sessao.getSegundos_foco()))
+                    .collect(Collectors.toList());
 
+            AtividadeDTO atividadeDTO = AtividadeDTO.builder()
+                    .atividadeId(atividade.getAtividadeId().getAtividadeId())
+                    .data(atividade.getData())
+                    .sessoes(sessoesDTO).build();
+
+            response.add(atividadeDTO);
+        }
+        return response;
+    }
 }
